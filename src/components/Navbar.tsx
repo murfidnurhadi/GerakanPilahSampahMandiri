@@ -16,6 +16,7 @@ import {
   Recycle,
   Phone,
   ChevronRight,
+  ChevronUp,
   Sparkles,
 } from 'lucide-react';
 
@@ -134,75 +135,92 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer (Clean, Spaced, Organized) */}
+      {/* Mobile Drawer — 60% width, tidak 100% menutupi, swipe-up sama seperti website */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-emerald-950 border-t border-emerald-800/80 px-4 py-4 space-y-3 shadow-2xl animate-in fade-in duration-200">
-          <div className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider px-2">
-            Menu Halaman
-          </div>
-          <div className="space-y-1">
-            {NAV_LINKS.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={(e) => {
-                    if (isActive) {
-                      e.preventDefault();
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                    setMobileMenuOpen(false);
-                  }}
-                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition ${
-                    isActive
-                      ? 'bg-emerald-800 text-white font-bold border border-emerald-600/50 shadow-sm'
-                      : 'text-emerald-100 hover:bg-emerald-900/70'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                        isActive
-                          ? 'bg-emerald-700 text-white'
-                          : 'bg-emerald-900/80 text-emerald-300'
-                      }`}
-                    >
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold">{item.name}</div>
-                      <div className="text-[11px] text-emerald-300/70 font-normal">
-                        {item.desc}
+        <>
+          {/* Backdrop — klik untuk tutup, masih terlihat menu di bawah (40% transparan) */}
+          <div
+            className="lg:hidden fixed inset-0 top-16 sm:top-20 z-30 bg-black/30 backdrop-blur-[2px]"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+          {/* Drawer — lebar 68-78% (sesuai panjang nama menu), tinggi auto max 72vh, tidak full */}
+          <div className="lg:hidden fixed top-16 sm:top-20 right-2 sm:right-3 z-40 w-[72%] max-w-[300px] max-h-[68vh] bg-emerald-950 border border-emerald-800/80 rounded-2xl shadow-2xl overflow-hidden animate-slideInRight flex flex-col">
+            {/* Handle bar + swipe indicator */}
+            <div className="flex justify-center pt-2 pb-1">
+              <div className="w-10 h-1 rounded-full bg-white/20" />
+            </div>
+            <div className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.14em] px-4 pb-1">
+              Menu Halaman
+            </div>
+            <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1 no-scrollbar">
+              {NAV_LINKS.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={(e) => {
+                      if (isActive) {
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition ${
+                      isActive
+                        ? 'bg-emerald-800 text-white font-bold border border-emerald-600/50 shadow-sm'
+                        : 'text-emerald-100 hover:bg-emerald-900/70'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                          isActive ? 'bg-emerald-700 text-white' : 'bg-emerald-900/80 text-emerald-300'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold truncate">{item.name}</div>
+                        <div className="text-[11px] text-emerald-300/70 font-normal truncate">
+                          {item.desc}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-emerald-400/60" />
-                </Link>
-              );
-            })}
-          </div>
+                    <ChevronRight className="w-4 h-4 text-emerald-400/60 shrink-0" />
+                  </Link>
+                );
+              })}
+            </div>
 
-          {/* Mobile Scan AI Big Button */}
-          <div className="pt-2 border-t border-emerald-900/80">
-            <Link
-              href="/scan-ai"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-400 to-emerald-300 text-emerald-950 font-black py-3 px-4 rounded-xl shadow-md active:scale-98 transition"
-            >
-              <Camera className="w-5 h-5" />
-              <span>Buka Kamera / Scan Foto Sampah</span>
-            </Link>
+            <div className="p-3 border-t border-emerald-900/80 space-y-2 bg-emerald-950">
+              <Link
+                href="/scan-ai"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-400 to-emerald-300 text-emerald-950 font-black py-3 px-4 rounded-xl shadow-md active:scale-98 transition text-sm"
+              >
+                <Camera className="w-4 h-4" />
+                <span>Buka Kamera</span>
+              </Link>
+              {/* Swipe up animation — sama seperti website */}
+              <div className="flex flex-col items-center gap-0.5 py-1">
+                <span className="text-[9px] font-black uppercase tracking-widest text-emerald-300/70">Swipe up untuk tutup</span>
+                <div className="flex flex-col items-center">
+                  <ChevronUp className="w-4 h-4 text-emerald-300 animate-swipe-bounce" />
+                  <ChevronUp className="w-3 h-3 text-emerald-300/50 animate-swipe-bounce" style={{ animationDelay: '0.2s' }} />
+                </div>
+                <div className="w-8 h-8 rounded-full border border-white/15 flex justify-center pt-1 mt-1">
+                  <div className="w-1 h-2 bg-emerald-300 rounded-full animate-swipe-bounce" />
+                </div>
+              </div>
+              <p className="text-center text-[10px] text-emerald-400/60 font-medium">
+                KKN UNIKOM 2026 • RW 04, 07, 14
+              </p>
+            </div>
           </div>
-
-          {/* Civic Badge Note */}
-          <div className="text-center pt-2">
-            <p className="text-[11px] text-emerald-400/70 font-medium">
-              Edukasi KKN UNIKOM 2026 • RW 04, 07, 14 Lebak Gede
-            </p>
-          </div>
-        </div>
+        </>
       )}
     </header>
   );
