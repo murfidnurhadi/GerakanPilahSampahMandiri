@@ -359,6 +359,13 @@ export default function WasteClassifier() {
                 {result && !loading && (
                   <div className="space-y-4">
                     
+                    {/* NAMA WEB SAAT SCAN BERHASIL */}
+                    <div className="flex items-center justify-center gap-1.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-black px-3 py-1.5 rounded-full">
+                      <Leaf className="w-3.5 h-3.5 text-emerald-700" />
+                      <span>Gerakan Pilah Sampah Mandiri</span>
+                      <span className="w-1 h-1 rounded-full bg-emerald-400" />
+                      <span className="font-normal">gerakan-pilah-sampah-mandiri.vercel.app</span>
+                    </div>
                     {/* BANNER UTAMA HASIL KEPUTUSAN: ORGANIK, ANORGANIK, ATAU RESIDU */}
                     <div
                       className={`rounded-2xl p-5 border-2 shadow-md transition ${
@@ -366,7 +373,9 @@ export default function WasteClassifier() {
                           ? 'bg-emerald-700 text-white border-emerald-800'
                           : result.category === 'anorganik'
                           ? 'bg-blue-700 text-white border-blue-800'
-                          : 'bg-red-700 text-white border-red-800'
+                          : result.category === 'residu'
+                          ? 'bg-red-700 text-white border-red-800'
+                          : 'bg-amber-600 text-white border-amber-700'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -377,15 +386,19 @@ export default function WasteClassifier() {
                                 ? 'text-emerald-700'
                                 : result.category === 'anorganik'
                                 ? 'text-blue-700'
-                                : 'text-red-700'
+                                : result.category === 'residu'
+                                ? 'text-red-700'
+                                : 'text-amber-700'
                             }`}
                           >
                             {result.category === 'organik' ? (
                               <Leaf className="w-6 h-6" />
                             ) : result.category === 'anorganik' ? (
                               <Recycle className="w-6 h-6" />
-                            ) : (
+                            ) : result.category === 'residu' ? (
                               <AlertTriangle className="w-6 h-6" />
+                            ) : (
+                              <span className="font-black text-[10px]">B3</span>
                             )}
                           </div>
                           <div>
