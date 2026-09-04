@@ -48,6 +48,30 @@ const config: Config = {
         'elevated': '0 4px 12px 0 rgba(0, 0, 0, 0.08)',
         'card': '0 2px 8px -2px rgba(0, 0, 0, 0.08), 0 1px 4px -1px rgba(0, 0, 0, 0.04)',
       },
+      animation: {
+        'swipe-bounce': 'swipeUpBounce 1.6s ease-in-out infinite',
+        'marquee': 'marquee 22s linear infinite',
+        'float': 'float 4s ease-in-out infinite',
+        'pulse-glow': 'pulseGlow 2.5s ease-in-out infinite',
+      },
+      keyframes: {
+        swipeUpBounce: {
+          '0%, 100%': { transform: 'translateY(0)', opacity: '1' },
+          '50%': { transform: 'translateY(-12px)', opacity: '0.7' },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-12px)' },
+        },
+        pulseGlow: {
+          '0%, 100%': { boxShadow: '0 0 20px rgba(16,185,129,0.4)' },
+          '50%': { boxShadow: '0 0 30px rgba(16,185,129,0.6)' },
+        },
+      },
     },
   },
   plugins: [],
