@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useTransition, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Leaf,
   Menu,
@@ -32,15 +32,69 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const lastNavRef = useRef(0);
+  const [navLock, setNavLock] = useState(false);
+
+  // cegah spam klik 2x yang bikin 404 chunk (dev HMR)
+  const handleNav = (e: React.MouseEvent, href: string, closeMenu = true) => {
+    if (closeMenu) {
+      // untuk mobile: tutup dulu biar tidak tumpuk animasi
+    }
+    if (pathname === href) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (closeMenu) setMobileMenuOpen(false);
+      return;
+    }
+    const now = Date.now();
+    if (now - lastNavRef.current < 700 || isPending || navLock) {
+      e.preventDefault();
+      return;
+    }
+    lastNavRef.current = now;
+    e.preventDefault();
+    setNavLock(true);
+    if (closeMenu) setMobileMenuOpen(false);
+    startTransition(() => {
+      router.push(href);
+      setTimeout(() => setNavLock(false), 800);
+    });
+  };
+
+  // reload otomatis jika chunk 404 (dev HMR race)
+  useEffect(() => {
+    const onError = (e: ErrorEvent) => {
+      if (e.message?.includes('ChunkLoadError') || e.message?.includes('404')) {
+        // jangan loop: hanya reload jika ada _next/static 404
+        if (e.filename?.includes('_next/static')) window.location.reload();
+      }
+    };
+    const onRej = (e: PromiseRejectionEvent) => {
+      const msg = (e.reason as Error)?.message || '';
+      if (msg.includes('ChunkLoadError') || msg.includes('Loading chunk')) window.location.reload();
+    };
+    window.addEventListener('error', onError);
+    window.addEventListener('unhandledrejection', onRej);
+    return () => {
+      window.removeEventListener('error', onError);
+      window.removeEventListener('unhandledrejection', onRej);
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-40 bg-emerald-950/95 backdrop-blur-md text-white border-b border-emerald-800/80 shadow-md">
+      {(isPending || navLock) && (
+        <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 animate-shimmer opacity-80" style={{ backgroundSize: '200% 100%' }} />
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
           
           {/* Brand Logo & Academic/Civic Identity */}
           <Link
             href="/"
+            onClick={(e) => handleNav(e, '/')}
             className="flex items-center gap-3 group shrink-0 focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded-xl p-1"
           >
             <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 text-emerald-950 flex items-center justify-center font-black shadow-md group-hover:scale-105 transition-transform">
@@ -74,13 +128,8 @@ export default function Navbar() {
                   href={item.href}
                   prefetch={true}
                   aria-current={isActive ? 'page' : undefined}
-                  onClick={(e) => {
-                    if (isActive) {
-                      e.preventDefault();
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                  }}
-                  className={`px-3 py-2 rounded-xl transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap ${
+                  onClick={(e) => handleNav(e, item.href, false)}
+                  className={`px-3 py-2 rounded-xl transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap ${isPending || navLock ? 'pointer-events-none opacity-60' : ''} ${
                     isActive
                       ? 'bg-emerald-800/90 text-white font-bold shadow-inner border border-emerald-600/60 pointer-events-auto'
                       : 'text-emerald-200/90 hover:text-white hover:bg-emerald-900/60'
@@ -96,13 +145,8 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center gap-3 shrink-0">
             <Link
               href="/scan-ai"
-              onClick={(e) => {
-                if (pathname === '/scan-ai') {
-                  e.preventDefault();
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-              }}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all shadow-md active:scale-95 ${
+              onClick={(e) => handleNav(e, '/scan-ai', false)}
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all shadow-md active:scale-95 ${isPending || navLock ? 'pointer-events-none opacity-60' : ''} ${
                 pathname === '/scan-ai'
                   ? 'bg-emerald-300 text-emerald-950 ring-2 ring-emerald-100 shadow-emerald-900/50'
                   : 'bg-emerald-400 hover:bg-emerald-300 text-emerald-950 hover:shadow-emerald-900/40'
@@ -117,7 +161,8 @@ export default function Navbar() {
           <div className="flex lg:hidden items-center gap-2">
             <Link
               href="/scan-ai"
-              className="inline-flex items-center gap-1.5 bg-emerald-400 hover:bg-emerald-300 text-emerald-950 text-xs font-black px-3 py-1.5 rounded-lg shadow-sm"
+              onClick={(e) => handleNav(e, '/scan-ai', false)}
+              className={`inline-flex items-center gap-1.5 bg-emerald-400 hover:bg-emerald-300 text-emerald-950 text-xs font-black px-3 py-1.5 rounded-lg shadow-sm ${isPending || navLock ? 'pointer-events-none opacity-60' : ''}`}
             >
               <Camera className="w-3.5 h-3.5" />
               <span>Scan AI</span>
@@ -170,14 +215,8 @@ export default function Navbar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    onClick={(e) => {
-                      if (isActive) {
-                        e.preventDefault();
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition ${
+                    onClick={(e) => handleNav(e, item.href, true)}
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition ${isPending || navLock ? 'pointer-events-none opacity-60' : ''} ${
                       isActive
                         ? 'bg-emerald-800 text-white font-bold border border-emerald-600/50 shadow-sm'
                         : 'text-emerald-100 hover:bg-emerald-900/70'
@@ -209,8 +248,8 @@ export default function Navbar() {
             <div className="p-3 border-t border-emerald-900/80 space-y-2 bg-emerald-950">
               <Link
                 href="/scan-ai"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-400 to-emerald-300 text-emerald-950 font-black py-3 px-4 rounded-xl shadow-md active:scale-98 transition text-sm"
+                onClick={(e) => handleNav(e, '/scan-ai', true)}
+                className={`w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-400 to-emerald-300 text-emerald-950 font-black py-3 px-4 rounded-xl shadow-md active:scale-98 transition text-sm ${isPending || navLock ? 'pointer-events-none opacity-60' : ''}`}
               >
                 <Camera className="w-4 h-4" />
                 <span>Buka Kamera</span>
