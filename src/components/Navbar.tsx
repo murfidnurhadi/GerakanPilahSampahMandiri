@@ -37,11 +37,8 @@ export default function Navbar() {
   const lastNavRef = useRef(0);
   const [navLock, setNavLock] = useState(false);
 
-  // cegah spam klik 2x yang bikin 404 chunk (dev HMR)
+  // cegah spam klik 2x + 404 chunk dev HMR (web & mobile)
   const handleNav = (e: React.MouseEvent, href: string, closeMenu = true) => {
-    if (closeMenu) {
-      // untuk mobile: tutup dulu biar tidak tumpuk animasi
-    }
     if (pathname === href) {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -57,29 +54,83 @@ export default function Navbar() {
     e.preventDefault();
     setNavLock(true);
     if (closeMenu) setMobileMenuOpen(false);
+
+    // di dev, hard reload untuk hindari _next/static?v=... 404 setelah rebuild/HMR
+    const isDev = process.env.NODE_ENV === 'development';
+    if (isDev) {
+      window.location.href = href;
+      return;
+    }
+
     startTransition(() => {
-      router.push(href);
+      // catch chunk 404 -> fallback full reload
+      try {
+        router.push(href);
+      } catch {
+        window.location.href = href;
+      }
       setTimeout(() => setNavLock(false), 800);
     });
+    // safety unlock
+    setTimeout(() => setNavLock(false), 1200);
   };
 
-  // reload otomatis jika chunk 404 (dev HMR race)
+  // reload otomatis jika chunk/css 404 (baik web & mobile)
   useEffect(() => {
+    const isNextStatic = (url: string) => url.includes('_next/static');
     const onError = (e: ErrorEvent) => {
-      if (e.message?.includes('ChunkLoadError') || e.message?.includes('404')) {
-        // jangan loop: hanya reload jika ada _next/static 404
-        if (e.filename?.includes('_next/static')) window.location.reload();
+      const target = e.target as HTMLElement | null;
+      const url = (target as HTMLLinkElement)?.href || (target as HTMLScriptElement)?.src || e.filename || '';
+      if (isNextStatic(url) || e.message?.includes('ChunkLoadError')) {
+        // hindari loop: reload sekali
+        if (!sessionStorage.getItem('chunkReload')) {
+          sessionStorage.setItem('chunkReload', '1');
+          window.location.reload();
+          setTimeout(() => sessionStorage.removeItem('chunkReload'), 3000);
+        }
       }
     };
     const onRej = (e: PromiseRejectionEvent) => {
-      const msg = (e.reason as Error)?.message || '';
-      if (msg.includes('ChunkLoadError') || msg.includes('Loading chunk')) window.location.reload();
+      const msg = (e.reason as Error)?.message || String(e.reason || '');
+      if (msg.includes('ChunkLoadError') || msg.includes('Loading chunk') || msg.includes('404')) {
+        if (!sessionStorage.getItem('chunkReload')) {
+          sessionStorage.setItem('chunkReload', '1');
+          window.location.reload();
+        }
+      }
     };
-    window.addEventListener('error', onError);
+    // tangkap resource error (css/js 404)
+    const onResourceError = (e: Event) => {
+      const t = e.target as HTMLElement;
+      const url = (t as HTMLLinkElement)?.href || (t as HTMLScriptElement)?.src || '';
+      if (isNextStatic(url)) {
+        if (!sessionStorage.getItem('chunkReload')) {
+          sessionStorage.setItem('chunkReload', '1');
+          window.location.reload();
+        }
+      }
+    };
+    window.addEventListener('error', onError, true);
+    window.addEventListener('error', onResourceError as EventListener, true);
     window.addEventListener('unhandledrejection', onRej);
+    // juga intercept fetch 404 untuk _next/static
+    const origFetch = window.fetch;
+    window.fetch = async (...args) => {
+      const res = await origFetch(...args);
+      const url = String(args[0] || '');
+      if (!res.ok && res.status === 404 && isNextStatic(url)) {
+        if (!sessionStorage.getItem('chunkReload')) {
+          sessionStorage.setItem('chunkReload', '1');
+          window.location.reload();
+        }
+      }
+      return res;
+    };
     return () => {
-      window.removeEventListener('error', onError);
+      window.removeEventListener('error', onError, true);
+      window.removeEventListener('error', onResourceError as EventListener, true);
       window.removeEventListener('unhandledrejection', onRej);
+      window.fetch = origFetch;
     };
   }, []);
 
@@ -94,6 +145,7 @@ export default function Navbar() {
           {/* Brand Logo & Academic/Civic Identity */}
           <Link
             href="/"
+            prefetch={false}
             onClick={(e) => handleNav(e, '/')}
             className="flex items-center gap-3 group shrink-0 focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded-xl p-1"
           >
@@ -126,7 +178,7 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  prefetch={true}
+                  prefetch={false}
                   aria-current={isActive ? 'page' : undefined}
                   onClick={(e) => handleNav(e, item.href, false)}
                   className={`px-3 py-2 rounded-xl transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap ${isPending || navLock ? 'pointer-events-none opacity-60' : ''} ${
@@ -145,6 +197,7 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center gap-3 shrink-0">
             <Link
               href="/scan-ai"
+              prefetch={false}
               onClick={(e) => handleNav(e, '/scan-ai', false)}
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all shadow-md active:scale-95 ${isPending || navLock ? 'pointer-events-none opacity-60' : ''} ${
                 pathname === '/scan-ai'
@@ -161,6 +214,7 @@ export default function Navbar() {
           <div className="flex lg:hidden items-center gap-2">
             <Link
               href="/scan-ai"
+              prefetch={false}
               onClick={(e) => handleNav(e, '/scan-ai', false)}
               className={`inline-flex items-center gap-1.5 bg-emerald-400 hover:bg-emerald-300 text-emerald-950 text-xs font-black px-3 py-1.5 rounded-lg shadow-sm ${isPending || navLock ? 'pointer-events-none opacity-60' : ''}`}
             >
@@ -215,6 +269,7 @@ export default function Navbar() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    prefetch={false}
                     onClick={(e) => handleNav(e, item.href, true)}
                     className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition ${isPending || navLock ? 'pointer-events-none opacity-60' : ''} ${
                       isActive
@@ -248,6 +303,7 @@ export default function Navbar() {
             <div className="p-3 border-t border-emerald-900/80 space-y-2 bg-emerald-950">
               <Link
                 href="/scan-ai"
+                prefetch={false}
                 onClick={(e) => handleNav(e, '/scan-ai', true)}
                 className={`w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-400 to-emerald-300 text-emerald-950 font-black py-3 px-4 rounded-xl shadow-md active:scale-98 transition text-sm ${isPending || navLock ? 'pointer-events-none opacity-60' : ''}`}
               >
