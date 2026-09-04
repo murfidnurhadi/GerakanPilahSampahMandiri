@@ -7,13 +7,6 @@ import { WASTE_ITEMS, WasteCategory } from '@/data/wasteData';
 
 export default function WasteCatalog() {
   const ref = useRef<HTMLElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('active')), { threshold: 0.08 });
-    el.querySelectorAll('.reveal').forEach((r) => obs.observe(r));
-    return () => obs.disconnect();
-  }, []);
   const [selectedCategory, setSelectedCategory] = useState<WasteCategory | 'semua'>('semua');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -33,6 +26,26 @@ export default function WasteCatalog() {
   const organikCount = WASTE_ITEMS.filter((i) => i.category === 'organik').length;
   const anorganikCount = WASTE_ITEMS.filter((i) => i.category === 'anorganik').length;
   const residuCount = WASTE_ITEMS.filter((i) => i.category === 'residu').length;
+  const elektronikCount = WASTE_ITEMS.filter((i) => (i.category as string) === 'elektronik').length;
+
+  // Reveal observer — re-run tiap filteredItems berubah agar kartu baru tidak tetap opacity 0
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const nodes = Array.from(el.querySelectorAll('.reveal')) as HTMLElement[];
+    // fallback aman: langsung aktifkan jika observer tidak support / sudah di viewport
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && (e.target as HTMLElement).classList.add('active')),
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+    );
+    nodes.forEach((n) => obs.observe(n));
+    // Fallback: setelah 700ms paksa aktif (mencegah bug gambar hilang saat search/reset)
+    const t = setTimeout(() => nodes.forEach((n) => n.classList.add('active')), 700);
+    return () => {
+      clearTimeout(t);
+      obs.disconnect();
+    };
+  }, [filteredItems]);
 
   return (
     <section ref={ref} id="katalog-sampah-section" className="py-12 sm:py-16 bg-white border-t border-emerald-100 relative overflow-hidden">
@@ -126,6 +139,18 @@ export default function WasteCatalog() {
             >
               Residu Merah ({residuCount})
             </button>
+
+            <button
+              type="button"
+              onClick={() => setSelectedCategory('elektronik')}
+              className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition ${
+                selectedCategory === 'elektronik'
+                  ? 'bg-zinc-800 text-white shadow-sm'
+                  : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-800 border border-zinc-300'
+              }`}
+            >
+              Elektronik & Material ({elektronikCount})
+            </button>
           </div>
           {searchQuery && (
             <div className="text-center text-xs text-slate-500">
@@ -160,6 +185,7 @@ export default function WasteCatalog() {
             {filteredItems.map((item, idx) => {
               const isOrganik = item.category === 'organik';
               const isAnorganik = item.category === 'anorganik';
+              const isElektronik = item.category === 'elektronik';
               const delay = idx % 4 === 1 ? 'reveal-delay-1' : idx % 4 === 2 ? 'reveal-delay-2' : idx % 4 === 3 ? 'reveal-delay-3' : '';
 
               return (
@@ -177,7 +203,7 @@ export default function WasteCatalog() {
                     />
                     <span
                       className={`absolute top-2 left-2 text-[10px] font-black uppercase px-2 py-0.5 rounded shadow-sm ${
-                        isOrganik ? 'bg-emerald-700 text-white' : isAnorganik ? 'bg-blue-700 text-white' : 'bg-red-700 text-white'
+                        isOrganik ? 'bg-emerald-700 text-white' : isAnorganik ? 'bg-blue-700 text-white' : isElektronik ? (item.binColor === 'amber' ? 'bg-amber-600 text-white' : 'bg-zinc-700 text-white') : 'bg-red-700 text-white'
                       }`}
                     >
                       {item.binName}

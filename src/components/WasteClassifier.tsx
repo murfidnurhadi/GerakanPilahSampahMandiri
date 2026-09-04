@@ -124,6 +124,10 @@ export default function WasteClassifier() {
         name: 'Sampah Residu / Sachet Kotor (Koreksi Pengguna)',
         en: 'Residual Waste (User Corrected)',
       },
+      elektronik: {
+        name: 'Sampah Elektronik / B3 (Koreksi Pengguna)',
+        en: 'E-Waste B3 (User Corrected)',
+      },
     };
 
     const info = overrides[targetCategory];
@@ -147,7 +151,7 @@ export default function WasteClassifier() {
       <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10 space-y-3 reveal">
         <div className="inline-flex items-center gap-1.5 bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider">
           <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
-          <span>Klasifikasi AI 3 Kategori: Organik • Anorganik • Residu</span>
+          <span>Klasifikasi AI 3 Kategori + E-Waste: Organik • Anorganik • Residu • Elektronik</span>
         </div>
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
           Cek Sampah: Organik, Anorganik, atau Residu?
@@ -509,7 +513,7 @@ export default function WasteClassifier() {
                           <HelpCircle className="w-3.5 h-3.5 text-slate-500" />
                           <span>Hasil kurang pas? Pilih kategori langsung:</span>
                         </div>
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                           <button
                             type="button"
                             onClick={() => handleManualOverride('organik')}
@@ -545,6 +549,18 @@ export default function WasteClassifier() {
                           >
                             <AlertTriangle className="w-3 h-3" />
                             <span>Residu</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleManualOverride('elektronik')}
+                            className={`py-1.5 px-2 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1 ${
+                              result.category === 'elektronik'
+                                ? 'bg-zinc-700 text-white ring-2 ring-zinc-400'
+                                : 'bg-white hover:bg-zinc-100 text-zinc-800 border border-zinc-300'
+                            }`}
+                          >
+                            <span className="w-3 h-3 rounded-full bg-amber-500 border border-amber-600" />
+                            <span>E-Waste</span>
                           </button>
                         </div>
                       </div>

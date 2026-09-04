@@ -1,4 +1,4 @@
-export type WasteCategory = 'organik' | 'anorganik' | 'residu';
+export type WasteCategory = 'organik' | 'anorganik' | 'residu' | 'elektronik';
 
 export interface WasteItem {
   id: string;
@@ -6,7 +6,7 @@ export interface WasteItem {
   category: WasteCategory;
   subCategory: string;
   binName: string;
-  binColor: 'emerald' | 'blue' | 'red';
+  binColor: 'emerald' | 'blue' | 'red' | 'amber' | 'zinc';
   imageUrl: string;
   preparationTip: string;
   destination: string;
@@ -354,5 +354,79 @@ export const WASTE_ITEMS: WasteItem[] = [
     preparationTip: 'Pastikan padam sempurna, kantong kecil terpisah. Puntung mengandung mikroplastik.',
     destination: 'Truk DLHK — residu',
     tags: ['rokok', 'puntung', 'abu', 'puntung rokok'],
+  },
+
+  // ================= ELEKTRONIK & MATERIAL B3 (DROP BOX KHUSUS) =================
+  {
+    id: 'baterai-bekas',
+    name: 'Baterai Bekas AA/AAA & Kancing',
+    category: 'elektronik',
+    subCategory: 'E-Waste B3',
+    binName: 'Drop Box B3',
+    binColor: 'amber',
+    imageUrl: 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=600&auto=format&fit=crop&q=80',
+    preparationTip: 'Jangan dibongkar. Selotip kedua kutub, kumpulkan toples kaca. Risiko korsleting & merkuri.',
+    destination: 'Drop Box B3 Kelurahan / DLHK B3 → daur ulang logam berat',
+    tags: ['baterai', 'baterai bekas', 'aa', 'aaa', 'kancing', 'elektronik', 'b3', 'aki kecil'],
+  },
+  {
+    id: 'lampu-bohlam-tl',
+    name: 'Lampu Bohlam, TL & LED Bekas',
+    category: 'elektronik',
+    subCategory: 'E-Waste B3',
+    binName: 'Drop Box B3',
+    binColor: 'amber',
+    imageUrl: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=600&auto=format&fit=crop&q=80',
+    preparationTip: 'Bungkus kardus + koran, tulis “LAMPU — KACA & MERKURI”. Jangan pecahkan.',
+    destination: 'Drop Box B3 Kelurahan Lebak Gede → pengolahan B3',
+    tags: ['lampu', 'bohlam', 'tl', 'led', 'neon', 'elektronik', 'b3', 'lampu bekas'],
+  },
+  {
+    id: 'hp-charger-bekas',
+    name: 'HP, Charger & Powerbank Rusak',
+    category: 'elektronik',
+    subCategory: 'E-Waste',
+    binName: 'Drop Box E-Waste',
+    binColor: 'zinc',
+    imageUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop&q=80',
+    preparationTip: 'Hapus data, lepas casing/SD card. Jangan banting baterai tanam.',
+    destination: 'Bank Sampah Elektronik RW 14 / Drop Box HP → pengepul resmi',
+    tags: ['hp', 'handphone', 'charger', 'powerbank', 'elektronik', 'gadget', 'hp bekas'],
+  },
+  {
+    id: 'kabel-colokan-putus',
+    name: 'Kabel, Stop Kontak & Colokan Putus',
+    category: 'elektronik',
+    subCategory: 'Material Listrik',
+    binName: 'Drop Box E-Waste',
+    binColor: 'zinc',
+    imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&fit=crop&q=80',
+    preparationTip: 'Gulung rapi, ikat kabel ties. Tembaga dalam kabel bernilai.',
+    destination: 'Bank Sampah Elektronik → daur ulang tembaga',
+    tags: ['kabel', 'stop kontak', 'colokan', 'kabel putus', 'elektronik', 'material', 'tembaga'],
+  },
+  {
+    id: 'cat-aki-kaleng',
+    name: 'Kaleng Cat, Aki Motor & Oli Bekas',
+    category: 'elektronik',
+    subCategory: 'Material B3',
+    binName: 'Drop Box B3',
+    binColor: 'amber',
+    imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&auto=format&fit=crop&q=80',
+    preparationTip: 'Tutup rapat, jangan tuang ke got/tanah. Oli bekas = B3 cair.',
+    destination: 'DLHK B3 Kelurahan → pengolahan khusus (jangan ke TPA)',
+    tags: ['cat', 'aki', 'oli', 'b3', 'kaleng cat', 'material', 'oli bekas', 'aki bekas'],
+  },
+  {
+    id: 'karton-tebal-triplek',
+    name: 'Triplek, Kayu & Besi Sisa Renovasi',
+    category: 'elektronik',
+    subCategory: 'Material Bangunan',
+    binName: 'Bank Material',
+    binColor: 'zinc',
+    imageUrl: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&auto=format&fit=crop&q=80',
+    preparationTip: 'Paku dicabut, kayu dipotong 1m. Bisa donasi ke warga butuh.',
+    destination: 'Bank Material RW / TPS3R → reuse atau daur ulang kayu/besi',
+    tags: ['triplek', 'kayu', 'besi', 'material', 'renovasi', 'bangunan', 'material bangunan'],
   },
 ];

@@ -7,7 +7,7 @@ export interface ClassificationResult {
   category: WasteCategory;
   categoryLabel: string;
   binName: string;
-  binColor: 'emerald' | 'blue' | 'red';
+  binColor: 'emerald' | 'blue' | 'red' | 'amber' | 'zinc';
   confidence: number;
   detectedObject: string;
   detectedObjectIndonesian: string;
@@ -260,7 +260,27 @@ export function buildResult(
     };
   }
 
-  // 3. RESIDU
+  // 3. ELEKTRONIK & MATERIAL B3
+  if (category === 'elektronik') {
+    return {
+      isOrganic: false,
+      verdictTitle: 'SAMPAH ELEKTRONIK & B3',
+      verdictSubtitle: 'Baterai, lampu, HP, kabel, cat/aki — mengandung logam berat, jangan ke TPA',
+      category: 'elektronik',
+      categoryLabel: 'Sampah Elektronik & Material B3 (Drop Box Khusus)',
+      binName: 'DROP BOX B3',
+      binColor: 'amber',
+      confidence: Math.min(confidence, 98),
+      detectedObject: rawEnglish,
+      detectedObjectIndonesian: detectedIndonesian,
+      recommendation: 'JANGAN dibuang ke Wadah Merah/Hijau. Selotip kutub baterai, bungkus lampu dengan kardus, hapus data HP. Kumpulkan di toples/kardus khusus.',
+      actionGuide: 'Serahkan ke Drop Box B3 Kelurahan Lebak Gede atau Bank Sampah Elektronik RW 14 (didaur ulang resmi, tidak ke TPA Sarimukti).',
+      matchedCatalogItem: matchedItem,
+      candidateScores,
+    };
+  }
+
+  // 4. RESIDU
   return {
     isOrganic: false,
     verdictTitle: isAmbiguous ? 'SAMPAH RESIDU — CEK MANUAL' : 'SAMPAH RESIDU',
