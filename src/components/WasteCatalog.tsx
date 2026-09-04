@@ -1,11 +1,19 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Search, X, MapPin, Tag } from 'lucide-react';
+import { Search, X, MapPin, ChevronUp } from 'lucide-react';
 import { WASTE_ITEMS, WasteCategory } from '@/data/wasteData';
 
 export default function WasteCatalog() {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('active')), { threshold: 0.08 });
+    el.querySelectorAll('.reveal').forEach((r) => obs.observe(r));
+    return () => obs.disconnect();
+  }, []);
   const [selectedCategory, setSelectedCategory] = useState<WasteCategory | 'semua'>('semua');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -27,11 +35,12 @@ export default function WasteCatalog() {
   }, [selectedCategory, searchQuery]);
 
   return (
-    <section id="katalog-sampah" className="py-12 sm:py-16 bg-white border-t border-emerald-100">
-      <div className="max-w-6xl mx-auto px-4">
+    <section ref={ref} id="katalog-sampah" className="py-12 sm:py-16 bg-white border-t border-emerald-100 relative overflow-hidden">
+      <div className="absolute -top-20 -right-20 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl animate-float pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-4 relative">
         
         {/* Header Seksi Hijau */}
-        <div className="text-center max-w-2xl mx-auto mb-8">
+        <div className="text-center max-w-2xl mx-auto mb-8 reveal">
           <span className="text-xs font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 border border-emerald-300 px-3.5 py-1 rounded-full inline-block mb-2">
             Galeri Foto Barang Nyata
           </span>
@@ -44,7 +53,7 @@ export default function WasteCatalog() {
         </div>
 
         {/* Kontrol Pencarian & Filter Kategori */}
-        <div className="max-w-2xl mx-auto mb-8 space-y-3">
+        <div className="max-w-2xl mx-auto mb-8 space-y-3 reveal reveal-delay-1">
           {/* Kolom Pencarian */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-emerald-700">
@@ -122,23 +131,24 @@ export default function WasteCatalog() {
 
         {/* Grid Gambar Kartu */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filteredItems.map((item) => {
+          {filteredItems.map((item, idx) => {
             const isOrganik = item.category === 'organik';
             const isAnorganik = item.category === 'anorganik';
+            const delay = idx % 4 === 1 ? 'reveal-delay-1' : idx % 4 === 2 ? 'reveal-delay-2' : idx % 4 === 3 ? 'reveal-delay-3' : '';
 
             return (
               <div
                 key={item.id}
-                className="bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-emerald-500 shadow-subtle hover:shadow-md transition flex flex-col justify-between group"
+                className={`reveal ${delay} bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-emerald-500 shadow-subtle hover:shadow-lg hover:-translate-y-1 transition duration-300 flex flex-col justify-between group`}
               >
                 {/* Foto Barang */}
                 <div className="relative h-36 sm:h-40 w-full bg-slate-100 overflow-hidden">
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition duration-300"
-                  />
+                    <Image
+                     src={item.imageUrl}
+                     alt={item.name}
+                     fill
+                     className="object-cover group-hover:scale-110 transition duration-500"
+                   />
                   {/* Badge Kategori */}
                   <span
                     className={`absolute top-2 left-2 text-[10px] font-black uppercase px-2 py-0.5 rounded shadow-sm ${
@@ -172,6 +182,11 @@ export default function WasteCatalog() {
               </div>
             );
           })}
+        </div>
+
+        <div className="reveal flex flex-col items-center gap-1 mt-8 opacity-60">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Geser untuk lihat aksi 3R</span>
+          <ChevronUp className="w-4 h-4 text-slate-400 rotate-180 animate-swipe-bounce" />
         </div>
 
       </div>

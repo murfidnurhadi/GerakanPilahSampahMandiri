@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import {
   Phone,
@@ -15,7 +15,7 @@ import {
   Building,
   ShieldCheck,
   Sparkles,
-  ArrowRight,
+  ChevronUp,
 } from 'lucide-react';
 
 const GASLAH_RW_DATA = [
@@ -73,14 +73,24 @@ const GASLAH_RW_DATA = [
 ];
 
 export default function PoskoRWSection() {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('active')), { threshold: 0.1 });
+    el.querySelectorAll('.reveal').forEach((r) => obs.observe(r));
+    return () => obs.disconnect();
+  }, []);
   return (
-    <section id="kontak-gaslah" className="py-10 sm:py-16 bg-slate-50 border-t border-slate-200">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+    <section ref={ref} id="kontak-gaslah" className="py-10 sm:py-16 bg-slate-50 border-t border-slate-200 relative overflow-hidden">
+      <div className="absolute -top-20 -left-20 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl animate-float pointer-events-none" />
+      <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl animate-float-slow pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
         
         {/* ========================================================= */}
         {/* 1. SOLUSI HUBUNGI NOMOR KELOMPOK HANYA 1 (CALL CENTER)   */}
         {/* ========================================================= */}
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-white p-6 sm:p-10 border-2 border-emerald-600 shadow-xl mb-12">
+        <div className="reveal relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-white p-6 sm:p-10 border-2 border-emerald-600 shadow-xl mb-12 hover:shadow-2xl transition duration-500">
           
           <div className="relative z-10 max-w-3xl space-y-4">
             
@@ -104,7 +114,7 @@ export default function PoskoRWSection() {
                 href="https://wa.me/6282123456789?text=Halo%20Tim%20KKN%20UNIKOM%20Kelurahan%20Lebak%20Gede,%20saya%20warga%20ingin%20konsultasi%20tentang%20pemilahan%20sampah."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-emerald-400 hover:bg-emerald-300 text-emerald-950 font-black text-base sm:text-lg px-7 py-4 rounded-2xl shadow-xl active:scale-95 transition-all group"
+                className="inline-flex items-center justify-center gap-3 bg-emerald-400 hover:bg-emerald-300 text-emerald-950 font-black text-base sm:text-lg px-7 py-4 rounded-2xl shadow-xl active:scale-95 transition-all group animate-pulse-glow hover:scale-105"
               >
                 <MessageSquare className="w-6 h-6 text-emerald-950 group-hover:scale-110 transition-transform" />
                 <div className="text-left leading-tight">
@@ -133,7 +143,7 @@ export default function PoskoRWSection() {
         {/* ========================================================= */}
         {/* 2. PROGRAM 3 PETUGAS GASLAH DI SETIAP RW                  */}
         {/* ========================================================= */}
-        <div className="mb-10 text-center max-w-3xl mx-auto space-y-2">
+        <div className="reveal mb-10 text-center max-w-3xl mx-auto space-y-2">
           <span className="text-xs font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 border border-emerald-300 px-3.5 py-1 rounded-full inline-block">
             Inisiatif Pemkot Bandung 2026
           </span>
@@ -147,12 +157,13 @@ export default function PoskoRWSection() {
 
         {/* Grid 3 RW: Masing-masing Memiliki 3 Petugas GASLAH */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          {GASLAH_RW_DATA.map((item) => {
+          {GASLAH_RW_DATA.map((item, idx) => {
             const Icon = item.icon;
+            const delay = idx === 1 ? 'reveal-delay-1' : idx === 2 ? 'reveal-delay-2' : '';
             return (
               <div
                 key={item.rw}
-                className={`bg-white rounded-3xl overflow-hidden border-2 ${item.borderColor} shadow-md flex flex-col justify-between`}
+                className={`reveal ${delay} bg-white rounded-3xl overflow-hidden border-2 ${item.borderColor} shadow-md flex flex-col justify-between hover:shadow-xl hover:-translate-y-1.5 transition duration-500`}
               >
                 <div className="p-6 space-y-4">
                   
@@ -231,7 +242,7 @@ export default function PoskoRWSection() {
         </div>
 
         {/* Banner Kantor Kelurahan & Sinergi */}
-        <div className="bg-white rounded-2xl p-5 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs shadow-sm">
+        <div className="reveal bg-white rounded-2xl p-5 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs shadow-sm hover:shadow-md transition duration-300">
           <div className="flex items-center gap-3.5">
             <div className="w-11 h-11 rounded-xl bg-emerald-800 text-white flex items-center justify-center font-black flex-shrink-0">
               <Building className="w-5 h-5" />
@@ -249,11 +260,16 @@ export default function PoskoRWSection() {
             href="https://wa.me/6282123456789?text=Halo%20Tim%20KKN%20UNIKOM%20Lebak%20Gede,%20saya%20warga%20ingin%20konsultasi%20pemilahan%20sampah."
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-shrink-0 inline-flex items-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-4 py-2.5 rounded-xl transition"
+            className="flex-shrink-0 inline-flex items-center gap-2 bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-4 py-2.5 rounded-xl transition hover:scale-105"
           >
             <Phone className="w-4 h-4" />
             <span>Hubungi Hotline Kelompok</span>
           </a>
+        </div>
+
+        <div className="reveal flex flex-col items-center gap-1 mt-8 opacity-60">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Geser untuk kembali ke beranda</span>
+          <ChevronUp className="w-4 h-4 text-slate-400 rotate-180 animate-swipe-bounce" />
         </div>
 
       </div>

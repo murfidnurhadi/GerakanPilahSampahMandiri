@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import {
   Camera,
@@ -10,13 +10,11 @@ import {
   XCircle,
   Info,
   Sparkles,
-  ExternalLink,
   Leaf,
-  Ban,
   Recycle,
   AlertTriangle,
   HelpCircle,
-  Check,
+  ChevronUp,
 } from 'lucide-react';
 import { classifyWasteImage, buildResult, ClassificationResult } from '@/lib/classifier';
 import { WasteCategory } from '@/data/wasteData';
@@ -61,6 +59,14 @@ export default function WasteClassifier() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('active')), { threshold: 0.1 });
+    el.querySelectorAll('.reveal').forEach((r) => obs.observe(r));
+    return () => obs.disconnect();
+  }, []);
 
   const handleFile = async (file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -133,10 +139,12 @@ export default function WasteClassifier() {
   };
 
   return (
-    <section id="scan-ai" className="py-8 sm:py-12 md:py-16 max-w-5xl mx-auto px-4">
+    <section ref={sectionRef} id="scan-ai" className="py-8 sm:py-12 md:py-16 max-w-5xl mx-auto px-4 relative overflow-hidden">
+      <div className="absolute -top-10 -left-10 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl animate-float pointer-events-none" />
+      <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl animate-float-slow pointer-events-none" />
       
       {/* Header Pengenal 3 Kategori */}
-      <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10 space-y-2">
+      <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10 space-y-3 reveal">
         <div className="inline-flex items-center gap-1.5 bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider">
           <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
           <span>Klasifikasi AI 3 Kategori: Organik • Anorganik • Residu</span>
@@ -147,10 +155,19 @@ export default function WasteClassifier() {
         <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
           Ambil foto sampah atau unggah gambar. Model AI akan mengidentifikasi apakah sampah ini termasuk <strong>Organik (Wadah Hijau)</strong>, <strong>Anorganik (Wadah Biru)</strong>, atau <strong>Residu (Wadah Merah)</strong>.
         </p>
+        {/* Disclaimer akurasi */}
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 text-left flex gap-3">
+          <div className="w-8 h-8 rounded-lg bg-amber-100 border border-amber-200 flex items-center justify-center shrink-0">
+            <Info className="w-4 h-4 text-amber-700" />
+          </div>
+          <div className="text-xs leading-relaxed text-slate-700">
+            <span className="font-bold text-amber-900">Batasan akurasi scanner:</span> AI hanya mengenali <b>kategori wadah kasar</b> (Hijau/Biru/Merah), bukan rincian bahan. Untuk piring campur seperti <b>nasi + bubuk mie + telur dadar</b>, AI tidak bisa membedakan bumbu/merk satu per satu — tetap masuk <b>Wadah Hijau (Organik)</b>. Pisahkan sachet/kresek bumbu ke Wadah Merah dan gunakan tombol koreksi di bawah hasil jika perlu.
+          </div>
+        </div>
       </div>
 
       {/* Kotak Scanner Utama */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-5 sm:p-8">
+      <div className="reveal reveal-delay-1 bg-white rounded-3xl border border-slate-200 shadow-xl p-5 sm:p-8 hover:shadow-2xl transition duration-500">
         
         {/* Hidden Inputs */}
         <input
@@ -386,6 +403,12 @@ export default function WasteClassifier() {
                           {result.detectedObjectIndonesian}
                         </span>
                       </div>
+                      {result.confidence < 75 && (
+                        <div className="mt-3 bg-amber-100 text-amber-900 border border-amber-300 rounded-xl p-2.5 text-xs flex gap-2">
+                          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                          <span><b>Keyakinan rendah ({result.confidence}%)</b> — foto piring campur / pencahayaan kurang. AI tidak dapat mendeteksi rincian seperti bubuk mie atau potongan telur satu per satu. Hasil menunjukkan kategori wadah kasar saja. Silakan pisahkan sachet/kresek ke Wadah Merah dan gunakan koreksi 1-klik di bawah.</span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Breakdown Probabilitas 3 Skor Kategori */}
@@ -536,6 +559,10 @@ export default function WasteClassifier() {
           </div>
         )}
 
+      </div>
+      <div className="reveal flex flex-col items-center gap-1 mt-8 opacity-60">
+        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Geser untuk lihat katalog</span>
+        <ChevronUp className="w-4 h-4 text-slate-400 rotate-180 animate-swipe-bounce" />
       </div>
     </section>
   );

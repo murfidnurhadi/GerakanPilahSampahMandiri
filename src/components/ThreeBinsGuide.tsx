@@ -1,16 +1,26 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Leaf, Recycle, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Leaf, Recycle, AlertTriangle, ChevronUp } from 'lucide-react';
 
 export default function ThreeBinsGuide() {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('active')), { threshold: 0.12 });
+    el.querySelectorAll('.reveal').forEach((r) => obs.observe(r));
+    return () => obs.disconnect();
+  }, []);
   return (
-    <section id="tiga-wadah" className="py-12 sm:py-16 bg-emerald-50/60 border-y border-emerald-200">
-      <div className="max-w-6xl mx-auto px-4">
+    <section ref={ref} id="tiga-wadah" className="py-12 sm:py-16 bg-emerald-50/60 border-y border-emerald-200 relative overflow-hidden">
+      <div className="absolute -top-20 -right-20 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl animate-float pointer-events-none" />
+      <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl animate-float-slow pointer-events-none" />
+      <div className="max-w-6xl mx-auto px-4 relative">
         
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="text-xs font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 border border-emerald-300 px-3.5 py-1 rounded-full inline-block mb-2">
+        <div className="text-center max-w-2xl mx-auto mb-10 reveal">
+          <span className="text-xs font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 border border-emerald-300 px-3.5 py-1 rounded-full inline-block mb-2 animate-pulse-glow">
             Panduan Wadah Bergambar
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
@@ -25,7 +35,7 @@ export default function ThreeBinsGuide() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           {/* ================= 1. WADAH HIJAU (ORGANIK) ================= */}
-          <div className="bg-white rounded-3xl overflow-hidden border-2 border-emerald-500 shadow-md flex flex-col">
+          <div className="reveal bg-white rounded-3xl overflow-hidden border-2 border-emerald-500 shadow-md flex flex-col hover:shadow-xl hover:-translate-y-1.5 transition duration-500 group">
             {/* Header Hijau */}
             <div className="bg-emerald-700 text-white p-4 text-center">
               <div className="text-[11px] font-black uppercase tracking-widest text-emerald-200">Wadah 01</div>
@@ -36,12 +46,12 @@ export default function ThreeBinsGuide() {
             </div>
 
             {/* Foto Utama */}
-            <div className="relative h-48 w-full bg-slate-900">
+            <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
               <Image
                 src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=700&auto=format&fit=crop&q=80"
                 alt="Contoh sampah organik: sisa sayur dan kulit buah"
                 fill
-                className="object-cover"
+                className="object-cover group-hover:scale-110 transition duration-700"
               />
             </div>
 
@@ -70,7 +80,7 @@ export default function ThreeBinsGuide() {
           </div>
 
           {/* ================= 2. WADAH BIRU (ANORGANIK) ================= */}
-          <div className="bg-white rounded-3xl overflow-hidden border-2 border-blue-500 shadow-md flex flex-col">
+          <div className="reveal reveal-delay-1 bg-white rounded-3xl overflow-hidden border-2 border-blue-500 shadow-md flex flex-col hover:shadow-xl hover:-translate-y-1.5 transition duration-500 group">
             {/* Header Biru */}
             <div className="bg-blue-700 text-white p-4 text-center">
               <div className="text-[11px] font-black uppercase tracking-widest text-blue-200">Wadah 02</div>
@@ -81,12 +91,12 @@ export default function ThreeBinsGuide() {
             </div>
 
             {/* Foto Utama */}
-            <div className="relative h-48 w-full bg-slate-900">
+            <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
               <Image
                 src="https://images.unsplash.com/photo-1528323273322-d81458248d40?w=700&auto=format&fit=crop&q=80"
                 alt="Contoh sampah anorganik botol plastik dan kardus"
                 fill
-                className="object-cover"
+                className="object-cover group-hover:scale-110 transition duration-700"
               />
             </div>
 
@@ -115,7 +125,7 @@ export default function ThreeBinsGuide() {
           </div>
 
           {/* ================= 3. WADAH MERAH (RESIDU) ================= */}
-          <div className="bg-white rounded-3xl overflow-hidden border-2 border-red-500 shadow-md flex flex-col">
+          <div className="reveal reveal-delay-2 bg-white rounded-3xl overflow-hidden border-2 border-red-500 shadow-md flex flex-col hover:shadow-xl hover:-translate-y-1.5 transition duration-500 group">
             {/* Header Merah */}
             <div className="bg-red-700 text-white p-4 text-center">
               <div className="text-[11px] font-black uppercase tracking-widest text-red-200">Wadah 03</div>
@@ -126,12 +136,12 @@ export default function ThreeBinsGuide() {
             </div>
 
             {/* Foto Utama */}
-            <div className="relative h-48 w-full bg-slate-900">
+            <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
               <Image
                 src="https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=700&auto=format&fit=crop&q=80"
                 alt="Contoh sampah residu popok dan sachet multilayer"
                 fill
-                className="object-cover"
+                className="object-cover group-hover:scale-110 transition duration-700"
               />
             </div>
 
@@ -159,6 +169,11 @@ export default function ThreeBinsGuide() {
             </div>
           </div>
 
+        </div>
+
+        <div className="reveal flex flex-col items-center gap-1 mt-8 opacity-60">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Geser untuk lihat katalog</span>
+          <ChevronUp className="w-4 h-4 text-slate-400 rotate-180 animate-swipe-bounce" />
         </div>
 
       </div>

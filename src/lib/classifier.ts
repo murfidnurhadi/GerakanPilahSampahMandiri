@@ -118,38 +118,59 @@ export async function classifyWasteImage(
           residual: Math.round(residualScore * 100),
         };
 
-        // Kategori 1: SAMPAH ORGANIK
-        if (organicScore > recyclableScore && organicScore > residualScore) {
-          const confidence = Math.min(Math.max(Math.round(organicScore * 100), 75), 99);
+        const scores = [
+          { cat: 'organik' as const, score: organicScore },
+          { cat: 'anorganik' as const, score: recyclableScore },
+          { cat: 'residu' as const, score: residualScore },
+        ].sort((a, b) => b.score - a.score);
+        const top = scores[0];
+        const second = scores[1];
+        const isAmbiguous = top.score < 0.48 || top.score - second.score < 0.1;
+
+        // Kategori 1: SAMPAH ORGANIK (dengan penanganan campuran)
+        if (top.cat === 'organik') {
+          const baseConf = Math.round(top.score * 100);
+          const confidence = isAmbiguous
+            ? Math.min(Math.max(Math.round(baseConf * 0.82), 52), 74)
+            : Math.min(Math.max(baseConf, 75), 96);
           return buildResult(
             'organik',
-            'Sisa Makanan / Buah / Sayuran Organik',
-            'Organic Material',
+            isAmbiguous ? 'Sisa Makanan Campuran (Piring Campur)' : 'Sisa Makanan / Buah / Sayuran Organik',
+            isAmbiguous ? 'Mixed Organic Plate' : 'Organic Material',
             confidence,
-            candidateScores
+            candidateScores,
+            isAmbiguous
           );
         }
 
         // Kategori 2: SAMPAH ANORGANIK (DAUR ULANG)
-        if (recyclableScore >= residualScore) {
-          const confidence = Math.min(Math.max(Math.round(recyclableScore * 100), 75), 98);
+        if (top.cat === 'anorganik') {
+          const baseConf = Math.round(top.score * 100);
+          const confidence = isAmbiguous
+            ? Math.min(Math.max(Math.round(baseConf * 0.82), 52), 74)
+            : Math.min(Math.max(baseConf, 75), 96);
           return buildResult(
             'anorganik',
-            'Kemasan Plastik / Botol / Kardus Daur Ulang',
-            'Recyclable Material',
+            isAmbiguous ? 'Kemasan Campur / Perlu Dipilah Manual' : 'Kemasan Plastik / Botol / Kardus Daur Ulang',
+            isAmbiguous ? 'Mixed Recyclables' : 'Recyclable Material',
             confidence,
-            candidateScores
+            candidateScores,
+            isAmbiguous
           );
         }
 
         // Kategori 3: SAMPAH RESIDU
-        const confidence = Math.min(Math.max(Math.round(residualScore * 100), 75), 98);
+        const baseConf = Math.round(top.score * 100);
+        const confidence = isAmbiguous
+          ? Math.min(Math.max(Math.round(baseConf * 0.82), 52), 74)
+          : Math.min(Math.max(baseConf, 75), 96);
         return buildResult(
           'residu',
-          'Sampah Residu / Kantong Plastik / Sachet',
-          'Residual Waste',
+          isAmbiguous ? 'Campuran Residu / Perlu Cek Manual' : 'Sampah Residu / Kantong Plastik / Sachet',
+          isAmbiguous ? 'Mixed Residual' : 'Residual Waste',
           confidence,
-          candidateScores
+          candidateScores,
+          isAmbiguous
         );
       }
     }
@@ -169,13 +190,16 @@ export async function classifyWasteImage(
 
 /**
  * Membangun hasil klasifikasi lengkap sesuai 3 kategori pemilahan: Organik, Anorganik, Residu.
+ * isAmbiguous = true bila skor antar-kategori berdekatan (contoh: piring nasi + bumbu mie + telur dadar).
+ * AI HANYA mengenali kategori kasar (wadah), BUKAN rincian bahan/brand/bumbu.
  */
 export function buildResult(
   category: WasteCategory,
   detectedIndonesian: string,
   rawEnglish: string,
   confidence: number,
-  candidateScores?: { organic: number; recyclable: number; residual: number }
+  candidateScores?: { organic: number; recyclable: number; residual: number },
+  isAmbiguous: boolean = false
 ): ClassificationResult {
   const matchedItem = WASTE_ITEMS.find(
     (item) =>
@@ -188,8 +212,10 @@ export function buildResult(
   if (category === 'organik') {
     return {
       isOrganic: true,
-      verdictTitle: 'SAMPAH ORGANIK',
-      verdictSubtitle: 'Bahan alami mudah membusuk & dapat diolah menjadi kompos atau pakan maggot',
+      verdictTitle: isAmbiguous ? 'SAMPAH ORGANIK — CAMPURAN' : 'SAMPAH ORGANIK',
+      verdictSubtitle: isAmbiguous
+        ? 'Terdeteksi piring campuran (mis. nasi + bumbu mie + telur). AI hanya mengenali kategori wadah, bukan rincian bumbu/lauk.'
+        : 'Bahan alami mudah membusuk dan dapat diolah menjadi kompos atau pakan maggot',
       category: 'organik',
       categoryLabel: 'Sampah Organik (Wadah Hijau)',
       binName: 'WADAH HIJAU',
@@ -197,10 +223,12 @@ export function buildResult(
       confidence: Math.min(confidence, 99),
       detectedObject: rawEnglish,
       detectedObjectIndonesian: detectedIndonesian,
-      recommendation:
-        'PENTING: Jangan dimasukkan dalam kantong kresek! Tiriskan kuahnya dan segera tutup wadah agar tidak dikerubungi lalat.',
-      actionGuide:
-        'Salurkan untuk bahan pupuk kompos Kebun SAE (RW 04) atau pakan biokonversi Maggot BSF (RW 07). Tidak perlu dibuang ke TPA Sarimukti!',
+      recommendation: isAmbiguous
+        ? 'KETERBATASAN AKURASI: Untuk piring campur, AI tidak bisa membedakan nasi, bubuk mie, atau telur dadar satu per satu. Pisahkan yang masih berminyak/berbumbu pekat, tiriskan kuah, lalu masukkan semua sisa organik ke Wadah Hijau. Tutup rapat agar tidak dilalui lalat.'
+        : 'PENTING: Jangan dimasukkan dalam kantong kresek. Tiriskan kuahnya dan segera tutup wadah agar tidak dikerubungi lalat.',
+      actionGuide: isAmbiguous
+        ? 'Semua sisa makanan campur ini tetap masuk Wadah Hijau — salurkan ke pakan Maggot BSF RW 07 atau kompos Kebun SAE RW 04. Pisahkan plastik/sachet bumbu ke Wadah Merah.'
+        : 'Salurkan untuk bahan pupuk kompos Kebun SAE (RW 04) atau pakan biokonversi Maggot BSF (RW 07). Tidak perlu dibuang ke TPA Sarimukti.',
       matchedCatalogItem: matchedItem,
       candidateScores,
     };
@@ -210,8 +238,10 @@ export function buildResult(
   if (category === 'anorganik') {
     return {
       isOrganic: false,
-      verdictTitle: 'SAMPAH ANORGANIK',
-      verdictSubtitle: 'Bahan sintetis/kering yang tidak membusuk dan bernilai ekonomis untuk didaur ulang',
+      verdictTitle: isAmbiguous ? 'SAMPAH ANORGANIK — PERLU CEK MANUAL' : 'SAMPAH ANORGANIK',
+      verdictSubtitle: isAmbiguous
+        ? 'Skor kategori berdekatan. Pastikan benda kering, bersih, dan tidak terkontaminasi makanan.'
+        : 'Bahan sintetis/kering yang tidak membusuk dan bernilai ekonomis untuk didaur ulang',
       category: 'anorganik',
       categoryLabel: 'Sampah Anorganik (Wadah Biru)',
       binName: 'WADAH BIRU',
@@ -219,10 +249,12 @@ export function buildResult(
       confidence: Math.min(confidence, 98),
       detectedObject: rawEnglish,
       detectedObjectIndonesian: detectedIndonesian,
-      recommendation:
-        'JANGAN dicampur dengan sisa makanan! Pastikan dalam kondisi KERING & BERSIH dari sisa cairan agar bernilai rupiah.',
-      actionGuide:
-        'Kumpulkan dan tabung ke Bank Sampah Berkah RW 14 atau masukkan ke Dropbox RW 04 & RW 07 untuk didaur ulang.',
+      recommendation: isAmbiguous
+        ? 'KETERBATASAN: Foto kurang jelas atau benda kotor bercampur sisa makanan. Bilas dan keringkan dulu. Jika masih berminyak/berkuah, pindahkan ke Wadah Merah.'
+        : 'JANGAN dicampur dengan sisa makanan. Pastikan dalam kondisi KERING dan BERSIH dari sisa cairan agar bernilai rupiah.',
+      actionGuide: isAmbiguous
+        ? 'Jika sudah bersih/kering, setor ke Bank Sampah Berkah RW 14. Jika terkontaminasi berat, masukkan ke Wadah Merah.'
+        : 'Kumpulkan dan tabung ke Bank Sampah Berkah RW 14 atau masukkan ke Dropbox RW 04 dan RW 07 untuk didaur ulang.',
       matchedCatalogItem: matchedItem,
       candidateScores,
     };
@@ -231,8 +263,10 @@ export function buildResult(
   // 3. RESIDU
   return {
     isOrganic: false,
-    verdictTitle: 'SAMPAH RESIDU',
-    verdictSubtitle: 'Sampah kotor, terkontaminasi, atau berbahaya yang sulit didaur ulang dan tidak membusuk',
+    verdictTitle: isAmbiguous ? 'SAMPAH RESIDU — CEK MANUAL' : 'SAMPAH RESIDU',
+    verdictSubtitle: isAmbiguous
+      ? 'AI kurang yakin. Cek apakah ini sachet/bungkus berlapis, popok, atau tisu terkontaminasi.'
+      : 'Sampah kotor, terkontaminasi, atau berbahaya yang sulit didaur ulang dan tidak membusuk',
     category: 'residu',
     categoryLabel: 'Sampah Residu (Wadah Merah)',
     binName: 'WADAH MERAH',
@@ -240,10 +274,12 @@ export function buildResult(
     confidence: Math.min(confidence, 98),
     detectedObject: rawEnglish,
     detectedObjectIndonesian: detectedIndonesian,
-    recommendation:
-      'JANGAN dicampur dengan sisa makanan ataupun barang daur ulang! Bungkus rapat dalam kantong plastik terikat.',
-    actionGuide:
-      'Satu-satunya kategori sampah yang diangkut oleh truk DLHK ke TPA Sarimukti secara terjadwal.',
+    recommendation: isAmbiguous
+      ? 'KETERBATASAN: Jika ini bungkus sachet mie/bumbu atau kresek berminyak, memang masuk Residu. Bungkus rapat terikat, jangan campur dengan daur ulang.'
+      : 'JANGAN dicampur dengan sisa makanan ataupun barang daur ulang. Bungkus rapat dalam kantong plastik terikat.',
+    actionGuide: isAmbiguous
+      ? 'Bungkus rapat dan serahkan ke angkutan DLHK terjadwal ke TPA. Pisahkan bagian yang masih bisa didaur ulang bila memungkinkan.'
+      : 'Satu-satunya kategori sampah yang diangkut oleh truk DLHK ke TPA Sarimukti secara terjadwal.',
     matchedCatalogItem: matchedItem,
     candidateScores,
   };
