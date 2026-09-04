@@ -15,7 +15,6 @@ import {
   Building,
   ShieldCheck,
   Sparkles,
-  ChevronUp,
 } from 'lucide-react';
 
 const GASLAH_RW_DATA = [
@@ -77,9 +76,11 @@ export default function PoskoRWSection() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('active')), { threshold: 0.1 });
-    el.querySelectorAll('.reveal').forEach((r) => obs.observe(r));
-    return () => obs.disconnect();
+    const nodes = Array.from(el.querySelectorAll('.reveal')) as HTMLElement[];
+    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && (e.target as HTMLElement).classList.add('active')), { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+    nodes.forEach((n) => obs.observe(n));
+    const t = setTimeout(() => nodes.forEach((n) => n.classList.add('active')), 900);
+    return () => { clearTimeout(t); obs.disconnect(); };
   }, []);
   return (
     <section ref={ref} id="kontak-gaslah" className="py-10 sm:py-16 bg-slate-50 border-t border-slate-200 relative overflow-hidden">
@@ -265,11 +266,6 @@ export default function PoskoRWSection() {
             <Phone className="w-4 h-4" />
             <span>Hubungi Hotline Kelompok</span>
           </a>
-        </div>
-
-        <div className="reveal flex flex-col items-center gap-1 mt-8 opacity-60">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Geser untuk kembali ke beranda</span>
-          <ChevronUp className="w-4 h-4 text-slate-400 rotate-180 animate-swipe-bounce" />
         </div>
 
       </div>

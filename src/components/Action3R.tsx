@@ -2,20 +2,18 @@
 
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { ShoppingBag, Sprout, Building2, Quote, ChevronUp } from 'lucide-react';
+import { ShoppingBag, Sprout, Building2, Quote } from 'lucide-react';
 
 export default function Action3R() {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && (e.target as HTMLElement).classList.add('active')), { threshold: 0.12 });
-    el.querySelectorAll('.reveal').forEach((r) => obs.observe(r));
-    const t = setTimeout(() => el.querySelectorAll('.reveal').forEach((n) => n.classList.add('active')), 800);
-    return () => {
-      clearTimeout(t);
-      obs.disconnect();
-    };
+    const nodes = Array.from(el.querySelectorAll('.reveal')) as HTMLElement[];
+    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && (e.target as HTMLElement).classList.add('active')), { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+    nodes.forEach((n) => obs.observe(n));
+    const t = setTimeout(() => nodes.forEach((n) => n.classList.add('active')), 900);
+    return () => { clearTimeout(t); obs.disconnect(); };
   }, []);
   return (
     <section ref={ref} id="aksi-3r-section" className="py-12 sm:py-16 max-w-6xl mx-auto px-4 relative overflow-hidden">
@@ -115,10 +113,6 @@ export default function Action3R() {
         <blockquote className="text-base sm:text-xl font-extrabold leading-snug">
           "Memilah dari dapur cuma butuh 5 detik, namun menjaga anak-cucu kita dari wabah penyakit selamanya."
         </blockquote>
-      </div>
-      <div className="reveal flex flex-col items-center gap-1 mt-6 opacity-60">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Geser untuk solusi RW</span>
-        <ChevronUp className="w-4 h-4 text-slate-400 rotate-180 animate-swipe-bounce" />
       </div>
 
     </section>

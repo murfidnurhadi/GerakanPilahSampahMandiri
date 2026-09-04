@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Search, X, MapPin, ChevronUp } from 'lucide-react';
+import { Search, X, MapPin } from 'lucide-react';
 import { WASTE_ITEMS, WasteCategory } from '@/data/wasteData';
 
 export default function WasteCatalog() {
@@ -240,11 +240,6 @@ export default function WasteCatalog() {
             })}
           </div>
         )}
-
-        <div className="reveal flex flex-col items-center gap-1 mt-8 opacity-60">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Geser untuk lihat aksi 3R</span>
-          <ChevronUp className="w-4 h-4 text-slate-400 rotate-180 animate-swipe-bounce" />
-        </div>
 
       </div>
     </section>

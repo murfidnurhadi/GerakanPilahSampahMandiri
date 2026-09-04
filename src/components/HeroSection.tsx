@@ -2,16 +2,18 @@
 
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Camera, BookOpen, AlertTriangle, CheckCircle, ChevronUp } from 'lucide-react';
+import { Camera, BookOpen, AlertTriangle, CheckCircle } from 'lucide-react';
 
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('active')), { threshold: 0.12 });
-    el.querySelectorAll('.reveal').forEach((r) => obs.observe(r));
-    return () => obs.disconnect();
+    const nodes = Array.from(el.querySelectorAll('.reveal')) as HTMLElement[];
+    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && (e.target as HTMLElement).classList.add('active')), { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+    nodes.forEach((n) => obs.observe(n));
+    const t = setTimeout(() => nodes.forEach((n) => n.classList.add('active')), 900);
+    return () => { clearTimeout(t); obs.disconnect(); };
   }, []);
   return (
     <section
@@ -106,11 +108,6 @@ export default function HeroSection() {
             <BookOpen className="w-5 h-5 text-emerald-300" />
             <span>Galeri Foto Barang</span>
           </a>
-        </div>
-
-        <div className="reveal flex flex-col items-center gap-1 mt-8 opacity-70">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-200">Geser ke bawah</span>
-          <ChevronUp className="w-4 h-4 text-emerald-300 rotate-180 animate-swipe-bounce" />
         </div>
 
       </div>

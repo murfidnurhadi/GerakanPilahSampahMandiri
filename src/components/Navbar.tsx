@@ -16,7 +16,6 @@ import {
   Recycle,
   Phone,
   ChevronRight,
-  ChevronUp,
   Sparkles,
 } from 'lucide-react';
 
@@ -204,17 +203,6 @@ export default function Navbar() {
                 <Camera className="w-4 h-4" />
                 <span>Buka Kamera</span>
               </Link>
-              {/* Swipe up animation — sama seperti website */}
-              <div className="flex flex-col items-center gap-0.5 py-1">
-                <span className="text-[9px] font-black uppercase tracking-widest text-emerald-300/70">Swipe up untuk tutup</span>
-                <div className="flex flex-col items-center">
-                  <ChevronUp className="w-4 h-4 text-emerald-300 animate-swipe-bounce" />
-                  <ChevronUp className="w-3 h-3 text-emerald-300/50 animate-swipe-bounce" style={{ animationDelay: '0.2s' }} />
-                </div>
-                <div className="w-8 h-8 rounded-full border border-white/15 flex justify-center pt-1 mt-1">
-                  <div className="w-1 h-2 bg-emerald-300 rounded-full animate-swipe-bounce" />
-                </div>
-              </div>
               <p className="text-center text-[10px] text-emerald-400/60 font-medium">
                 KKN UNIKOM 2026 • RW 04, 07, 14
               </p>

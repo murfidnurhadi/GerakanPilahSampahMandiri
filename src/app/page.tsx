@@ -218,14 +218,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1">
-          <span className="text-[9px] font-black uppercase tracking-[0.18em] text-white/70 bg-black/30 backdrop-blur px-2.5 py-1 rounded-full border border-white/10 hidden sm:block">Swipe Up</span>
-          <div className="flex flex-col items-center">
-            <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-white/80 animate-swipe-bounce" />
-            <ChevronUp className="w-3 h-3 sm:w-4 sm:h-4 text-white/40 animate-swipe-bounce" style={{ animationDelay: '0.2s' }} />
-          </div>
-        </div>
       </section>
 
       {/* Pesan Kunci 4 */}

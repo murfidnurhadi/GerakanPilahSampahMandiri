@@ -2,16 +2,18 @@
 
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { AlertTriangle, ShieldAlert, ChevronUp } from 'lucide-react';
+import { AlertTriangle, ShieldAlert } from 'lucide-react';
 
 export default function CrisisImpact() {
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('active')), { threshold: 0.12 });
-    el.querySelectorAll('.reveal').forEach((r) => obs.observe(r));
-    return () => obs.disconnect();
+    const nodes = Array.from(el.querySelectorAll('.reveal')) as HTMLElement[];
+    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && (e.target as HTMLElement).classList.add('active')), { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+    nodes.forEach((n) => obs.observe(n));
+    const t = setTimeout(() => nodes.forEach((n) => n.classList.add('active')), 900);
+    return () => { clearTimeout(t); obs.disconnect(); };
   }, []);
   return (
     <section ref={ref} id="dampak-bahaya-section" className="py-12 sm:py-16 max-w-6xl mx-auto px-4 relative overflow-hidden">
@@ -102,10 +104,6 @@ export default function CrisisImpact() {
       {/* Banner Ringkas Pesan Hijau */}
       <div className="reveal bg-gradient-to-r from-emerald-800 to-teal-800 text-white p-4 rounded-2xl text-center shadow-md flex items-center justify-center gap-2 text-sm sm:text-base font-bold hover:shadow-lg hover:scale-[1.01] transition duration-300">
         <span>Solusinya: Jangan biarkan sampah keluar rumah dalam keadaan campur aduk!</span>
-      </div>
-      <div className="reveal flex flex-col items-center gap-1 mt-6 opacity-60">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Geser untuk lanjut</span>
-        <ChevronUp className="w-4 h-4 text-slate-400 rotate-180 animate-swipe-bounce" />
       </div>
 
     </section>
