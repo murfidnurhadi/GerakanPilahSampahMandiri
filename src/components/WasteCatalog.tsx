@@ -28,19 +28,20 @@ export default function WasteCatalog() {
   const residuCount = WASTE_ITEMS.filter((i) => i.category === 'residu').length;
   const elektronikCount = WASTE_ITEMS.filter((i) => (i.category as string) === 'elektronik').length;
 
-  // Reveal observer — re-run tiap filteredItems berubah agar kartu baru tidak tetap opacity 0
+  // Reveal observer — replay tiap scroll up/down, tidak sekali saja
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const nodes = Array.from(el.querySelectorAll('.reveal')) as HTMLElement[];
-    // fallback aman: langsung aktifkan jika observer tidak support / sudah di viewport
     const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && (e.target as HTMLElement).classList.add('active')),
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) (e.target as HTMLElement).classList.add('active');
+        else (e.target as HTMLElement).classList.remove('active');
+      }),
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
     );
     nodes.forEach((n) => obs.observe(n));
-    // Fallback: setelah 700ms paksa aktif (mencegah bug gambar hilang saat search/reset)
-    const t = setTimeout(() => nodes.forEach((n) => n.classList.add('active')), 700);
+    const t = setTimeout(() => nodes.forEach((n) => { const r = n.getBoundingClientRect(); if (r.top < window.innerHeight && r.bottom > 0) n.classList.add('active'); }), 600);
     return () => {
       clearTimeout(t);
       obs.disconnect();

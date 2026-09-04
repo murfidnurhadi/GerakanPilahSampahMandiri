@@ -10,9 +10,12 @@ export default function Action3R() {
     const el = ref.current;
     if (!el) return;
     const nodes = Array.from(el.querySelectorAll('.reveal')) as HTMLElement[];
-    const obs = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && (e.target as HTMLElement).classList.add('active')), { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+    const obs = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) (e.target as HTMLElement).classList.add('active');
+      else (e.target as HTMLElement).classList.remove('active');
+    }), { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     nodes.forEach((n) => obs.observe(n));
-    const t = setTimeout(() => nodes.forEach((n) => n.classList.add('active')), 900);
+    const t = setTimeout(() => nodes.forEach((n) => { const r = n.getBoundingClientRect(); if (r.top < window.innerHeight && r.bottom > 0) n.classList.add('active'); }), 600);
     return () => { clearTimeout(t); obs.disconnect(); };
   }, []);
   return (

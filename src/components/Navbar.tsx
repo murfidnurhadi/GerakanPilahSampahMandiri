@@ -149,10 +149,20 @@ export default function Navbar() {
             <div className="flex justify-center pt-2 pb-1">
               <div className="w-10 h-1 rounded-full bg-white/20" />
             </div>
-            <div className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.14em] px-4 pb-1">
-              Menu Halaman
+            <div className="flex items-center justify-between px-4 pb-1">
+              <div className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.14em]">Menu Halaman</div>
+              <div className="flex items-center gap-1 text-[10px] font-bold text-emerald-300/70 bg-emerald-900/50 px-2 py-0.5 rounded-full border border-emerald-800">
+                <span>↕ scroll</span>
+                <div className="w-1.5 h-3 rounded-full bg-emerald-700 border border-emerald-600 flex justify-center pt-0.5">
+                  <div className="w-0.5 h-1 bg-white/80 rounded-full" />
+                </div>
+              </div>
             </div>
-            <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1 no-scrollbar">
+            {/* bar tipis indikator scroll */}
+            <div className="mx-4 h-0.5 bg-emerald-900 rounded-full overflow-hidden">
+              <div className="h-full w-2/3 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full" />
+            </div>
+            <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1 overscroll-contain relative" style={{ scrollbarWidth: 'thin', scrollbarColor: '#065f46 #022c22' }}>
               {NAV_LINKS.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
@@ -192,6 +202,8 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+              {/* bar bawah indikasi bisa scroll */}
+              <div className="sticky bottom-0 -mx-3 mt-2 h-4 bg-gradient-to-t from-emerald-950 via-emerald-950/70 to-transparent pointer-events-none" />
             </div>
 
             <div className="p-3 border-t border-emerald-900/80 space-y-2 bg-emerald-950">

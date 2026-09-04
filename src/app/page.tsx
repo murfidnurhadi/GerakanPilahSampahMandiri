@@ -36,12 +36,15 @@ function useReveal() {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && (e.target as HTMLElement).classList.add('active')),
-      { threshold: 0.06, rootMargin: '0px 0px -30px 0px' }
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) (e.target as HTMLElement).classList.add('active');
+        else (e.target as HTMLElement).classList.remove('active');
+      }),
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
     );
     const nodes = Array.from(el.querySelectorAll('.reveal')) as HTMLElement[];
     nodes.forEach((n) => obs.observe(n));
-    const t = setTimeout(() => nodes.forEach((n) => n.classList.add('active')), 800);
+    const t = setTimeout(() => nodes.forEach((n) => { const r = n.getBoundingClientRect(); if (r.top < window.innerHeight && r.bottom > 0) n.classList.add('active'); }), 600);
     return () => {
       clearTimeout(t);
       obs.disconnect();
