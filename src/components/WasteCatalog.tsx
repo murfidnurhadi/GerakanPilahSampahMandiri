@@ -35,7 +35,7 @@ export default function WasteCatalog() {
   }, [selectedCategory, searchQuery]);
 
   return (
-    <section ref={ref} id="katalog-sampah" className="py-12 sm:py-16 bg-white border-t border-emerald-100 relative overflow-hidden">
+    <section ref={ref} id="katalog-sampah-section" className="py-12 sm:py-16 bg-white border-t border-emerald-100 relative overflow-hidden">
       <div className="absolute -top-20 -right-20 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl animate-float pointer-events-none" />
       <div className="max-w-6xl mx-auto px-4 relative">
         

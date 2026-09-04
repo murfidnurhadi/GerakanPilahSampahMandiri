@@ -139,7 +139,7 @@ export default function WasteClassifier() {
   };
 
   return (
-    <section ref={sectionRef} id="scan-ai" className="py-8 sm:py-12 md:py-16 max-w-5xl mx-auto px-4 relative overflow-hidden">
+    <section ref={sectionRef} id="scan-ai-section" className="py-8 sm:py-12 md:py-16 max-w-5xl mx-auto px-4 relative overflow-hidden">
       <div className="absolute -top-10 -left-10 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl animate-float pointer-events-none" />
       <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl animate-float-slow pointer-events-none" />
       

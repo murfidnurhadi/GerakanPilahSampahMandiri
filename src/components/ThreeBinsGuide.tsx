@@ -14,7 +14,7 @@ export default function ThreeBinsGuide() {
     return () => obs.disconnect();
   }, []);
   return (
-    <section ref={ref} id="tiga-wadah" className="py-12 sm:py-16 bg-emerald-50/60 border-y border-emerald-200 relative overflow-hidden">
+    <section ref={ref} id="tiga-wadah-section" className="py-12 sm:py-16 bg-emerald-50/60 border-y border-emerald-200 relative overflow-hidden">
       <div className="absolute -top-20 -right-20 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl animate-float pointer-events-none" />
       <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl animate-float-slow pointer-events-none" />
       <div className="max-w-6xl mx-auto px-4 relative">

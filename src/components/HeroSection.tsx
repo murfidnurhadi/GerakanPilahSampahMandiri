@@ -16,7 +16,7 @@ export default function HeroSection() {
   return (
     <section
       ref={ref}
-      id="krisis-tpa"
+      id="krisis-tpa-section"
       className="relative bg-gradient-to-b from-emerald-950 via-emerald-900 to-emerald-950 text-white py-10 sm:py-16 overflow-hidden border-b border-emerald-800"
     >
       <div className="absolute -top-10 -right-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl animate-float pointer-events-none" />

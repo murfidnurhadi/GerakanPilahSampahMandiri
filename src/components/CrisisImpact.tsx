@@ -14,7 +14,7 @@ export default function CrisisImpact() {
     return () => obs.disconnect();
   }, []);
   return (
-    <section ref={ref} id="dampak-bahaya" className="py-12 sm:py-16 max-w-6xl mx-auto px-4 relative overflow-hidden">
+    <section ref={ref} id="dampak-bahaya-section" className="py-12 sm:py-16 max-w-6xl mx-auto px-4 relative overflow-hidden">
       <div className="absolute -top-10 -right-10 w-64 h-64 bg-red-500/5 rounded-full blur-3xl animate-float pointer-events-none" />
       <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl animate-float-slow pointer-events-none" />
       

@@ -14,7 +14,7 @@ export default function Action3R() {
     return () => obs.disconnect();
   }, []);
   return (
-    <section ref={ref} id="aksi-3r" className="py-12 sm:py-16 max-w-6xl mx-auto px-4 relative overflow-hidden">
+    <section ref={ref} id="aksi-3r-section" className="py-12 sm:py-16 max-w-6xl mx-auto px-4 relative overflow-hidden">
       <div className="absolute -top-10 -left-10 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl animate-float pointer-events-none" />
       <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-amber-500/5 rounded-full blur-3xl animate-float-slow pointer-events-none" />
       

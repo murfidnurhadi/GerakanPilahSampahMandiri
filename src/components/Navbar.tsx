@@ -72,9 +72,17 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={true}
+                  aria-current={isActive ? 'page' : undefined}
+                  onClick={(e) => {
+                    if (isActive) {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }}
                   className={`px-3 py-2 rounded-xl transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap ${
                     isActive
-                      ? 'bg-emerald-800/90 text-white font-bold shadow-inner border border-emerald-600/60'
+                      ? 'bg-emerald-800/90 text-white font-bold shadow-inner border border-emerald-600/60 pointer-events-auto'
                       : 'text-emerald-200/90 hover:text-white hover:bg-emerald-900/60'
                   }`}
                 >
@@ -88,6 +96,12 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center gap-3 shrink-0">
             <Link
               href="/scan-ai"
+              onClick={(e) => {
+                if (pathname === '/scan-ai') {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }}
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all shadow-md active:scale-95 ${
                 pathname === '/scan-ai'
                   ? 'bg-emerald-300 text-emerald-950 ring-2 ring-emerald-100 shadow-emerald-900/50'
@@ -134,7 +148,13 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    if (isActive) {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                    setMobileMenuOpen(false);
+                  }}
                   className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition ${
                     isActive
                       ? 'bg-emerald-800 text-white font-bold border border-emerald-600/50 shadow-sm'
