@@ -25,7 +25,7 @@ const NAV_LINKS = [
   { name: 'Bahaya Penyakit', href: '/bahaya-penyakit', icon: ShieldAlert, desc: 'Ancaman tumpukan TPS' },
   { name: '3 Wadah', href: '/tiga-wadah', icon: Layers, desc: 'Panduan pemilahan' },
   { name: 'Katalog', href: '/katalog', icon: BookOpen, desc: '18 contoh sampah' },
-  { name: 'Aksi 3R', href: '/aksi-3r', icon: Recycle, desc: 'Solusi mandiri & Kebun SAE' },
+  { name: 'Aksi 8R', href: '/aksi-3r', icon: Recycle, desc: '8 langkah Rethink s/d Rot — pakan ayam/lele' },
   { name: 'Solusi', href: '/posko-rw', icon: Phone, desc: '3 GASLAH Tiap RW & 1 Kontak' },
 ];
 

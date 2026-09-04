@@ -143,13 +143,13 @@ const INFO_PAGES = [
     btnText: 'Buka Katalog Foto',
   },
   {
-    title: 'Langkah Aksi 3R di Rumah',
-    desc: 'Kurangi kresek, pakai ulang botol, tabung sampah.',
+    title: 'Langkah Aksi 8R di Rumah',
+    desc: 'Rethink s/d Rot: tolak kresek, pakai ulang, repair, & olah jadi pakan ayam/lele.',
     href: '/aksi-3r',
-    badge: 'Aksi Nyata',
+    badge: 'Aksi 8R Baru',
     badgeColor: 'bg-teal-500 text-slate-950',
-    image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80',
-    btnText: 'Pelajari Solusi 3R',
+    image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&auto=format&fit=crop&q=80',
+    btnText: 'Pelajari Solusi 8R',
   },
 ];
 
