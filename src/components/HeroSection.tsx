@@ -52,8 +52,8 @@ export default function HeroSection() {
           <div className="reveal relative rounded-2xl overflow-hidden border-2 border-red-500/80 shadow-xl bg-slate-950 group hover:-translate-y-1 hover:shadow-2xl transition duration-500">
             <div className="relative h-60 sm:h-72 w-full">
               <Image
-                src="/images/tpa/sarimukti-overload.webp"
-                alt="Gunungan sampah TPA Sarimukti overload di Bandung"
+                src="/images/tpa/siliwangi-overload.webp"
+                alt="Gunungan sampah TPA Siliwangi overload di Bandung"
                 fill
                 priority
                 className="object-cover group-hover:scale-110 transition duration-700"

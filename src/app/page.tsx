@@ -102,10 +102,10 @@ const WADAH_DETAIL = [
     border: 'border-emerald-200',
     image: '/images/tiga-wadah/organik.webp',
     items: [
-      { name: 'Sisa nasi + mie + telur', img: '/images/katalog/organik/nasi-mie-telur-campur.webp', note: 'Pakan ayam kampung' },
-      { name: 'Sayur mentah & ampas tahu', img: '/images/katalog/organik/sayuran-mentah.webp', note: 'Pakan lele & nila' },
-      { name: 'Daun kering', img: '/images/katalog/organik/daun-kering-pekarangan.webp', note: 'Kompos' },
-      { name: 'Cangkang telur', img: '/images/katalog/organik/cangkang-telur.webp', note: 'Kalsium kompos' },
+      { name: 'Sisa nasi + mie + telur', img: '/images/katalog/organik/mie-instan.webp', note: 'Pakan ayam kampung' },
+      { name: 'Sayur mentah & ampas tahu', img: '/images/katalog/organik/sayur.webp', note: 'Pakan lele & nila' },
+      { name: 'Daun kering', img: '/images/katalog/organik/kelapa-parut.webp', note: 'Kompos' },
+      { name: 'Cangkang telur', img: '/images/katalog/organik/telur.webp', note: 'Kalsium kompos' },
     ],
   },
   {
@@ -116,10 +116,10 @@ const WADAH_DETAIL = [
     border: 'border-blue-200',
     image: '/images/tiga-wadah/anorganik.webp',
     items: [
-      { name: 'Botol PET bening', img: '/images/katalog/anorganik/botol-plastik-pet.webp', note: 'Bank Sampah' },
-      { name: 'Kardus & karton', img: '/images/katalog/anorganik/kardus-karton.webp', note: 'Rp 1.500/kg' },
-      { name: 'Kaleng aluminium', img: '/images/katalog/anorganik/kaleng-minuman-susu.webp', note: 'Rp 10.000/kg' },
-      { name: 'Minyak jelantah', img: '/images/katalog/anorganik/minyak-jelantah.webp', note: 'Biodiesel' },
+      { name: 'Botol PET bening', img: '/images/katalog/anorganik/botol-plastik.webp', note: 'Bank Sampah' },
+      { name: 'Kardus & karton', img: '/images/katalog/anorganik/kardus.webp', note: 'Rp 1.500/kg' },
+      { name: 'Kaleng aluminium', img: '/images/katalog/anorganik/botol-kaleng.webp', note: 'Rp 10.000/kg' },
+      { name: 'Minyak jelantah', img: '/images/katalog/anorganik/botol-kaca.webp', note: 'Biodiesel' },
     ],
   },
   {
@@ -130,10 +130,10 @@ const WADAH_DETAIL = [
     border: 'border-red-200',
     image: '/images/tiga-wadah/residu.webp',
     items: [
-      { name: 'Popok & pembalut', img: '/images/katalog/residu/popok-bayi-pampers.webp', note: 'Gulung rapat' },
-      { name: 'Sachet & kresek kotor', img: '/images/katalog/residu/bungkus-sachet-multilayer.webp', note: 'Multilayer' },
-      { name: 'Tisu & masker', img: '/images/katalog/residu/tisu-basah-kotor.webp', note: 'Mikroplastik' },
-      { name: 'Styrofoam', img: '/images/katalog/residu/styrofoam-wadah-makan.webp', note: 'Jangan dibakar' },
+      { name: 'Popok & pembalut', img: '/images/katalog/residu/popok.webp', note: 'Gulung rapat' },
+      { name: 'Sachet & kresek kotor', img: '/images/katalog/residu/plastik-multilayer.webp', note: 'Multilayer' },
+      { name: 'Tisu & masker', img: '/images/katalog/residu/tisu.webp', note: 'Mikroplastik' },
+      { name: 'Styrofoam', img: '/images/katalog/residu/plastik-multilayer.webp', note: 'Jangan dibakar' },
     ],
   },
 ];
