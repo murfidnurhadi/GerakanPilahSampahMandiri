@@ -4,6 +4,7 @@ import './globals.css';
 import UrgentAlert from '@/components/UrgentAlert';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import QrSuccessBanner from '@/components/QrSuccessBanner';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -47,6 +48,7 @@ export default function RootLayout({
       <body className="font-sans min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
         <UrgentAlert />
         <Navbar />
+        <QrSuccessBanner />
         <div className="flex-1">
           {children}
         </div>
