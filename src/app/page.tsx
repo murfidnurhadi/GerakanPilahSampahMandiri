@@ -229,14 +229,14 @@ export default function Home() {
             </span>
             <h2 className="mt-2 text-xl sm:text-3xl font-black text-slate-900">4 Kenyataan Wajib Tahu</h2>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="flex gap-3 sm:gap-4 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0">
             {[
               { n: '01', title: 'TPA Overload', desc: 'Overload, ritase ketat, bisa tutup total.', icon: AlertTriangle, grad: 'from-red-500 to-red-700' },
               { n: '02', title: 'TPS Meluap', desc: 'Campur = meluber, bau, drainase mampet.', icon: Trash2, grad: 'from-amber-500 to-orange-600' },
               { n: '03', title: 'Sumber Penyakit', desc: 'DBD, diare, ISPA dari lalat & asap.', icon: ShieldAlert, grad: 'from-orange-500 to-red-600' },
               { n: '04', title: 'Selesai di Rumah', desc: 'Tuntas di RW, jangan ke TPS.', icon: Heart, grad: 'from-emerald-500 to-teal-700' },
             ].map((c, i) => (
-              <div key={c.n} className={`reveal ${i % 2 ? 'reveal-delay-1' : ''} bg-white rounded-2xl border border-slate-200 p-4 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300`}>
+              <div key={c.n} className={`reveal ${i ? `reveal-delay-${i}` : ''} shrink-0 snap-start w-[72%] sm:w-[260px] bg-white rounded-2xl border border-slate-200 p-4 shadow-sm hover:shadow-md transition duration-300`}>
                 <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br ${c.grad} text-white flex items-center justify-center`}>
                   <c.icon className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
@@ -284,9 +284,9 @@ export default function Home() {
                 <div className="text-[11px] sm:text-xs text-emerald-100 mt-1">Cukup sediakan 3 wadah sederhana di rumah:</div>
               </div>
 
-              <div className="reveal grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {WADAH_DETAIL.map((col) => (
-                  <div key={col.title} className={`${col.light} rounded-2xl border ${col.border} overflow-hidden`}>
+              <div className="reveal flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0">
+                {WADAH_DETAIL.map((col, idx) => (
+                  <div key={col.title} className={`${col.light} shrink-0 snap-start w-[86%] sm:w-[340px] rounded-2xl border ${col.border} overflow-hidden ${idx ? `reveal-delay-${idx}` : ''}`}>
                     <div className={`${col.color} text-white p-3 text-center`}>
                       <div className="text-sm font-black">{col.title}</div>
                       <div className="text-[11px] opacity-90">{col.sub}</div>
@@ -328,9 +328,9 @@ export default function Home() {
             <p className="text-xs sm:text-sm text-slate-600 mt-1">Tap tombol untuk buka halaman edukasi sesuai kebutuhan.</p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-4 no-scrollbar scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0">
             {QUICK_NAV.map((item, idx) => (
-              <Link key={item.href} href={item.href} className={`reveal ${idx % 3 ? 'reveal-delay-1' : ''} group ${item.bg} border ${item.border} rounded-2xl p-4 hover:shadow-md hover:-translate-y-1 transition duration-300 flex flex-col gap-3`}>
+              <Link key={item.href} href={item.href} className={`reveal ${idx ? `reveal-delay-${idx % 3}` : ''} shrink-0 snap-start w-[46%] sm:w-[180px] group ${item.bg} border ${item.border} rounded-2xl p-4 hover:shadow-md transition duration-300 flex flex-col gap-3`}>
                 <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color} text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition`}>
                   <item.icon className="w-5 h-5" />
                 </div>
