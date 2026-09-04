@@ -100,12 +100,12 @@ const WADAH_DETAIL = [
     color: 'bg-emerald-600',
     light: 'bg-emerald-50',
     border: 'border-emerald-200',
-    image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=80',
+    image: '/images/tiga-wadah/organik.webp',
     items: [
-      { name: 'Sisa nasi + mie + telur', img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&auto=format&fit=crop&q=80', note: 'Pakan ayam kampung' },
-      { name: 'Sayur mentah & ampas tahu', img: 'https://images.unsplash.com/photo-1595278069441-2cf29f8005a4?w=200&auto=format&fit=crop&q=80', note: 'Pakan lele & nila' },
-      { name: 'Daun kering', img: 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=200&auto=format&fit=crop&q=80', note: 'Kompos' },
-      { name: 'Cangkang telur', img: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=200&auto=format&fit=crop&q=80', note: 'Kalsium kompos' },
+      { name: 'Sisa nasi + mie + telur', img: '/images/katalog/organik/nasi-mie-telur-campur.webp', note: 'Pakan ayam kampung' },
+      { name: 'Sayur mentah & ampas tahu', img: '/images/katalog/organik/sayuran-mentah.webp', note: 'Pakan lele & nila' },
+      { name: 'Daun kering', img: '/images/katalog/organik/daun-kering-pekarangan.webp', note: 'Kompos' },
+      { name: 'Cangkang telur', img: '/images/katalog/organik/cangkang-telur.webp', note: 'Kalsium kompos' },
     ],
   },
   {
@@ -114,12 +114,12 @@ const WADAH_DETAIL = [
     color: 'bg-blue-600',
     light: 'bg-blue-50',
     border: 'border-blue-200',
-    image: 'https://images.unsplash.com/photo-1528323273322-d81458248d40?w=500&auto=format&fit=crop&q=80',
+    image: '/images/tiga-wadah/anorganik.webp',
     items: [
-      { name: 'Botol PET bening', img: 'https://images.unsplash.com/photo-1528323273322-d81458248d40?w=200&auto=format&fit=crop&q=80', note: 'Bank Sampah' },
-      { name: 'Kardus & karton', img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=200&auto=format&fit=crop&q=80', note: 'Rp 1.500/kg' },
-      { name: 'Kaleng aluminium', img: 'https://images.unsplash.com/photo-1584282479905-eb8b22a012cf?w=200&auto=format&fit=crop&q=80', note: 'Rp 10.000/kg' },
-      { name: 'Minyak jelantah', img: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=200&auto=format&fit=crop&q=80', note: 'Biodiesel' },
+      { name: 'Botol PET bening', img: '/images/katalog/anorganik/botol-plastik-pet.webp', note: 'Bank Sampah' },
+      { name: 'Kardus & karton', img: '/images/katalog/anorganik/kardus-karton.webp', note: 'Rp 1.500/kg' },
+      { name: 'Kaleng aluminium', img: '/images/katalog/anorganik/kaleng-minuman-susu.webp', note: 'Rp 10.000/kg' },
+      { name: 'Minyak jelantah', img: '/images/katalog/anorganik/minyak-jelantah.webp', note: 'Biodiesel' },
     ],
   },
   {
@@ -128,12 +128,12 @@ const WADAH_DETAIL = [
     color: 'bg-red-600',
     light: 'bg-red-50',
     border: 'border-red-200',
-    image: 'https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=500&auto=format&fit=crop&q=80',
+    image: '/images/tiga-wadah/residu.webp',
     items: [
-      { name: 'Popok & pembalut', img: 'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=200&auto=format&fit=crop&q=80', note: 'Gulung rapat' },
-      { name: 'Sachet & kresek kotor', img: 'https://images.unsplash.com/photo-1589365278144-c9e705f843ba?w=200&auto=format&fit=crop&q=80', note: 'Multilayer' },
-      { name: 'Tisu & masker', img: 'https://images.unsplash.com/photo-1584483766114-2cea6facdf57?w=200&auto=format&fit=crop&q=80', note: 'Mikroplastik' },
-      { name: 'Styrofoam', img: 'https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=200&auto=format&fit=crop&q=80', note: 'Jangan dibakar' },
+      { name: 'Popok & pembalut', img: '/images/katalog/residu/popok-bayi-pampers.webp', note: 'Gulung rapat' },
+      { name: 'Sachet & kresek kotor', img: '/images/katalog/residu/bungkus-sachet-multilayer.webp', note: 'Multilayer' },
+      { name: 'Tisu & masker', img: '/images/katalog/residu/tisu-basah-kotor.webp', note: 'Mikroplastik' },
+      { name: 'Styrofoam', img: '/images/katalog/residu/styrofoam-wadah-makan.webp', note: 'Jangan dibakar' },
     ],
   },
 ];
@@ -167,7 +167,7 @@ export default function Home() {
       {/* Hero - tinggi dikurangi di HP agar tidak perlu scroll panjang */}
       <section className="relative min-h-[500px] sm:min-h-[560px] flex items-center justify-center overflow-hidden bg-slate-950 border-b border-emerald-900">
         <div className="absolute inset-0" style={{ transform: `translateY(${parallaxY}px) scale(1.06)` }}>
-          <Image src="https://www.infobdg.com/v2/wp-content/uploads/2024/06/istockphoto-1424551739-612x612-1.jpg" alt="TPA Sarimukti" fill priority className="object-cover object-center" />
+          <Image src="/images/tpa/hero-tpa.webp" alt="TPA Sarimukti" fill priority className="object-cover object-center" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/30" />
         <div className="absolute -top-10 -right-10 w-48 h-48 sm:w-72 sm:h-72 bg-emerald-500/15 rounded-full blur-3xl animate-float-slow pointer-events-none" />

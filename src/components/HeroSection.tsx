@@ -52,7 +52,7 @@ export default function HeroSection() {
           <div className="reveal relative rounded-2xl overflow-hidden border-2 border-red-500/80 shadow-xl bg-slate-950 group hover:-translate-y-1 hover:shadow-2xl transition duration-500">
             <div className="relative h-60 sm:h-72 w-full">
               <Image
-                src="https://www.infobdg.com/v2/wp-content/uploads/2024/06/istockphoto-1424551739-612x612-1.jpg"
+                src="/images/tpa/sarimukti-overload.webp"
                 alt="Gunungan sampah TPA Sarimukti overload di Bandung"
                 fill
                 priority
@@ -74,7 +74,7 @@ export default function HeroSection() {
           <div className="reveal reveal-delay-1 relative rounded-2xl overflow-hidden border-2 border-emerald-400 shadow-xl bg-emerald-950 group hover:-translate-y-1 hover:shadow-2xl transition duration-500">
             <div className="relative h-60 sm:h-72 w-full">
               <Image
-                src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&auto=format&fit=crop&q=80"
+                src="/images/tiga-wadah/kebun-sae.webp"
                 alt="Pekarangan hijau Buruan SAE Lebak Gede dengan tanaman subur hasil kompos"
                 fill
                 priority

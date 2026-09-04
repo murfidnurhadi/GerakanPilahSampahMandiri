@@ -40,11 +40,10 @@ export default function Action3R() {
         <div className="reveal bg-white rounded-2xl overflow-hidden border border-emerald-200 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition duration-500 group">
           <div className="relative h-48 w-full bg-slate-100 overflow-hidden">
             <Image
-              src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=700&auto=format&fit=crop&q=80"
+              src="/images/aksi-3r/reduce.webp"
               alt="Tas belanja kain ramah lingkungan untuk mengurangi kresek"
               fill
               className="object-cover group-hover:scale-110 transition duration-700"
-              unoptimized
             />
             <span className="absolute top-2.5 left-2.5 bg-emerald-700 text-white text-[11px] font-black px-2.5 py-0.5 rounded uppercase">
               1. REDUCE (Kurangi)
@@ -64,11 +63,10 @@ export default function Action3R() {
         <div className="reveal reveal-delay-1 bg-white rounded-2xl overflow-hidden border border-emerald-200 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition duration-500 group">
           <div className="relative h-48 w-full bg-slate-100 overflow-hidden">
             <Image
-              src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=700&auto=format&fit=crop&q=80"
+              src="/images/aksi-3r/reuse.webp"
               alt="Botol bekas dijadikan pot tanaman cabai pekarangan"
               fill
               className="object-cover group-hover:scale-110 transition duration-700"
-              unoptimized
             />
             <span className="absolute top-2.5 left-2.5 bg-emerald-700 text-white text-[11px] font-black px-2.5 py-0.5 rounded uppercase">
               2. REUSE (Pakai Ulang)
@@ -88,11 +86,10 @@ export default function Action3R() {
         <div className="reveal reveal-delay-2 bg-white rounded-2xl overflow-hidden border border-emerald-200 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition duration-500 group">
           <div className="relative h-48 w-full bg-slate-100 overflow-hidden">
             <Image
-              src="https://images.unsplash.com/photo-1591193686104-fddba4d0e4d8?w=700&auto=format&fit=crop&q=80"
+              src="/images/aksi-3r/recycle.webp"
               alt="Warga menimbang botol dan kardus di bank sampah"
               fill
               className="object-cover group-hover:scale-110 transition duration-700"
-              unoptimized
             />
             <span className="absolute top-2.5 left-2.5 bg-emerald-700 text-white text-[11px] font-black px-2.5 py-0.5 rounded uppercase">
               3. RECYCLE (Daur Ulang)

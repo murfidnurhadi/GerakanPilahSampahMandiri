@@ -53,7 +53,7 @@ export default function ThreeBinsGuide() {
             {/* Foto Utama */}
             <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=700&auto=format&fit=crop&q=80"
+                src="/images/tiga-wadah/organik.webp"
                 alt="Contoh sampah organik: sisa sayur dan kulit buah"
                 fill
                 className="object-cover group-hover:scale-110 transition duration-700"
@@ -98,7 +98,7 @@ export default function ThreeBinsGuide() {
             {/* Foto Utama */}
             <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1528323273322-d81458248d40?w=700&auto=format&fit=crop&q=80"
+                src="/images/tiga-wadah/anorganik.webp"
                 alt="Contoh sampah anorganik botol plastik dan kardus"
                 fill
                 className="object-cover group-hover:scale-110 transition duration-700"
@@ -143,7 +143,7 @@ export default function ThreeBinsGuide() {
             {/* Foto Utama */}
             <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=700&auto=format&fit=crop&q=80"
+                src="/images/tiga-wadah/residu.webp"
                 alt="Contoh sampah residu popok dan sachet multilayer"
                 fill
                 className="object-cover group-hover:scale-110 transition duration-700"

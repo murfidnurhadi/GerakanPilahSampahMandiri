@@ -43,7 +43,7 @@ export default function CrisisImpact() {
         <div className="reveal bg-white rounded-2xl overflow-hidden border-2 border-red-300 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition duration-500 group">
           <div className="relative h-48 w-full bg-slate-900">
             <Image
-              src="https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=600&auto=format&fit=crop&q=80"
+              src="/images/bahaya-penyakit/dbd-nyamuk-aedes.webp"
               alt="Nyamuk Aedes berkembang biak di genangan sampah plastik terbuka"
               fill
               className="object-cover group-hover:scale-110 transition duration-700"
@@ -64,7 +64,7 @@ export default function CrisisImpact() {
         <div className="reveal reveal-delay-1 bg-white rounded-2xl overflow-hidden border-2 border-amber-300 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition duration-500 group">
           <div className="relative h-48 w-full bg-slate-900">
             <Image
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXy0egh9hclMbqVT9hw-B3dNtvPw5ys_za3qTJzSdgjw&s=10"
+              src="/images/bahaya-penyakit/diare-lalat-hijau.webp"
               alt="Lalat hijau mengerubungi sampah basah dan membawa bakteri penyakit"
               fill
               className="object-cover group-hover:scale-110 transition duration-700"
@@ -85,7 +85,7 @@ export default function CrisisImpact() {
         <div className="reveal reveal-delay-2 bg-white rounded-2xl overflow-hidden border-2 border-cyan-300 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition duration-500 group">
           <div className="relative h-48 w-full bg-slate-900">
             <Image
-              src="https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=600&auto=format&fit=crop&q=80"
+              src="/images/bahaya-penyakit/ispa-asap-bakar.webp"
               alt="Polusi asap pembakaran sampah plastik liar merusak pernapasan"
               fill
               className="object-cover group-hover:scale-110 transition duration-700"
