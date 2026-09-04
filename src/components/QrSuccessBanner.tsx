@@ -17,11 +17,11 @@ export default function QrSuccessBanner() {
     if (isLikelyQrScan && !sessionStorage.getItem('qrWelcomeDismissed')) {
       // tunda 600ms agar tidak bentrok dengan loading
       const t = setTimeout(() => setShow(true), 600);
-      // auto hide setelah 6 detik
+      // auto hide setelah 3 detik (sesuai request)
       const t2 = setTimeout(() => {
         setShow(false);
         sessionStorage.setItem('qrWelcomeShown', '1');
-      }, 6600);
+      }, 3600);
       return () => {
         clearTimeout(t);
         clearTimeout(t2);
