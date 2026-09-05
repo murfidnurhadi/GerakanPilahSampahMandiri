@@ -41,11 +41,14 @@
   img, video, iframe {
     max-width: 100%;
   }
-  header, section, main, footer, aside {
+  section, main, footer, aside {
     max-width: 100%;
     overflow-x: clip;
   }
   header {
+    max-width: 100%;
+    /* jangan overflow-x:clip di header karena backdrop-blur + overflow akan menjebak fixed drawer */
+    overflow: visible;
     touch-action: pan-y;
     overscroll-behavior: contain;
   }

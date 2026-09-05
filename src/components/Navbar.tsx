@@ -182,7 +182,7 @@ export default function Navbar() {
   }, [mobileMenuOpen]);
 
   return (
-    <header className="sticky top-0 z-40 bg-emerald-950/95 backdrop-blur-md text-white border-b border-emerald-800/80 shadow-md w-full max-w-full overflow-x-hidden overscroll-contain touch-pan-y">
+    <header className="sticky top-0 z-40 bg-emerald-950/95 backdrop-blur-md text-white border-b border-emerald-800/80 shadow-md w-full">
       {(isPending || navLock) && (
         <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 animate-shimmer opacity-80" style={{ backgroundSize: '200% 100%' }} />
       )}
