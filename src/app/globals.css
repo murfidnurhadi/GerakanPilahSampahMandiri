@@ -12,7 +12,8 @@
     -webkit-text-size-adjust: 100%;
     overflow-x: hidden;
     overscroll-behavior-x: none;
-    overscroll-behavior: none;
+    /* jangan none di html — butuh auto agar pull-to-refresh & scroll normal */
+    overscroll-behavior-y: auto;
     max-width: 100%;
     width: 100%;
     position: relative;
@@ -26,7 +27,7 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     overscroll-behavior-x: none;
-    overscroll-behavior: none;
+    overscroll-behavior-y: auto;
     touch-action: pan-y;
     max-width: 100%;
     width: 100%;
