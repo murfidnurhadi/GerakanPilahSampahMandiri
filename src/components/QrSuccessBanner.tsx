@@ -61,7 +61,7 @@ export default function QrSuccessBanner() {
             <div className="text-xs font-semibold text-emerald-700">Kelurahan Lebak Gede • KKN UNIKOM 2026</div>
             <div className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
               <Sparkles className="w-3 h-3 text-emerald-500" />
-              gerakan-pilah-sampah-mandiri.vercel.app
+              gerakan-pilah-sampah-mandiri-6nuf.vercel.app
             </div>
           </div>
         </div>
