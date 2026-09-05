@@ -10,6 +10,12 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+    overscroll-behavior: none;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
   }
 
   body {
@@ -19,6 +25,29 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    overscroll-behavior-x: none;
+    overscroll-behavior: none;
+    touch-action: pan-y;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+    left: 0;
+    right: 0;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  img, video, iframe {
+    max-width: 100%;
+  }
+  header, section, main, footer, aside {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+  header {
+    touch-action: pan-y;
+    overscroll-behavior: contain;
   }
 }
 

@@ -44,12 +44,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={`scroll-smooth ${plusJakartaSans.variable}`}>
-      <body className="font-sans min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
+    <html lang="id" className={`scroll-smooth overflow-x-hidden max-w-full ${plusJakartaSans.variable}`}>
+      <body className="font-sans min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-emerald-100 selection:text-emerald-900 overflow-x-hidden max-w-full w-full">
         <UrgentAlert />
         <Navbar />
         <QrSuccessBanner />
-        <div className="flex-1">
+        <div className="flex-1 w-full max-w-full overflow-x-hidden">
           {children}
         </div>
         <Footer />

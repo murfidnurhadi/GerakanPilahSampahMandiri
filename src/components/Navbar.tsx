@@ -75,6 +75,45 @@ export default function Navbar() {
     setTimeout(() => setNavLock(false), 1200);
   };
 
+  // kunci scroll saat drawer terbuka — fix blank putih kanan (clear cache + mobile)
+  const scrollYRef = useRef(0);
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    if (mobileMenuOpen) {
+      scrollYRef.current = window.scrollY;
+      const prevBodyPosition = body.style.position;
+      const prevBodyTop = body.style.top;
+      const prevBodyLeft = body.style.left;
+      const prevBodyRight = body.style.right;
+      const prevBodyWidth = body.style.width;
+      const prevBodyOverflow = body.style.overflow;
+      const prevHtmlOverflow = html.style.overflow;
+      body.style.position = 'fixed';
+      body.style.top = `-${scrollYRef.current}px`;
+      body.style.left = '0';
+      body.style.right = '0';
+      body.style.width = '100%';
+      body.style.overflow = 'hidden';
+      html.style.overflow = 'hidden';
+      (html.style as CSSStyleDeclaration & { overscrollBehavior?: string }).overscrollBehavior = 'none';
+      (body.style as CSSStyleDeclaration & { overscrollBehavior?: string }).overscrollBehavior = 'none';
+      return () => {
+        body.style.position = prevBodyPosition;
+        body.style.top = prevBodyTop;
+        body.style.left = prevBodyLeft;
+        body.style.right = prevBodyRight;
+        body.style.width = prevBodyWidth;
+        body.style.overflow = prevBodyOverflow;
+        html.style.overflow = prevHtmlOverflow;
+        (html.style as CSSStyleDeclaration & { overscrollBehavior?: string }).overscrollBehavior = '';
+        (body.style as CSSStyleDeclaration & { overscrollBehavior?: string }).overscrollBehavior = '';
+        window.scrollTo(0, scrollYRef.current);
+      };
+    }
+    return undefined;
+  }, [mobileMenuOpen]);
+
   // reload otomatis jika chunk/css 404 (baik web & mobile)
   useEffect(() => {
     const isNextStatic = (url: string) => url.includes('_next/static');
@@ -134,8 +173,16 @@ export default function Navbar() {
     };
   }, []);
 
+  // Escape tutup drawer
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileMenuOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [mobileMenuOpen]);
+
   return (
-    <header className="sticky top-0 z-40 bg-emerald-950/95 backdrop-blur-md text-white border-b border-emerald-800/80 shadow-md">
+    <header className="sticky top-0 z-40 bg-emerald-950/95 backdrop-blur-md text-white border-b border-emerald-800/80 shadow-md w-full max-w-full overflow-x-hidden overscroll-contain touch-pan-y">
       {(isPending || navLock) && (
         <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 animate-shimmer opacity-80" style={{ backgroundSize: '200% 100%' }} />
       )}
@@ -238,12 +285,12 @@ export default function Navbar() {
         <>
           {/* Backdrop — klik untuk tutup, masih terlihat menu di bawah (40% transparan) */}
           <div
-            className="lg:hidden fixed inset-0 top-16 sm:top-20 z-30 bg-black/30 backdrop-blur-[2px]"
+            className="lg:hidden fixed inset-0 top-16 sm:top-20 z-30 bg-black/30 backdrop-blur-[2px] touch-none overscroll-contain"
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
           {/* Drawer — lebar 68-78% (sesuai panjang nama menu), tinggi auto max 72vh, tidak full */}
-          <div className="lg:hidden fixed top-16 sm:top-20 right-2 sm:right-3 z-40 w-[72%] max-w-[300px] max-h-[68vh] bg-emerald-950 border border-emerald-800/80 rounded-2xl shadow-2xl overflow-hidden animate-slideInRight flex flex-col">
+          <div className="lg:hidden fixed top-16 sm:top-20 right-2 sm:right-3 z-40 w-[72%] max-w-[300px] max-h-[68vh] bg-emerald-950 border border-emerald-800/80 rounded-2xl shadow-2xl overflow-hidden animate-slideInRight flex flex-col overscroll-contain" style={{ touchAction: 'pan-y' }}>
             {/* Handle bar + swipe indicator */}
             <div className="flex justify-center pt-2 pb-1">
               <div className="w-10 h-1 rounded-full bg-white/20" />
@@ -271,7 +318,7 @@ export default function Navbar() {
                     href={item.href}
                     prefetch={false}
                     onClick={(e) => handleNav(e, item.href, true)}
-                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition ${isPending || navLock ? 'pointer-events-none opacity-60' : ''} ${
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition ${!isActive && (isPending || navLock) ? 'pointer-events-none opacity-60' : ''} ${
                       isActive
                         ? 'bg-emerald-800 text-white font-bold border border-emerald-600/50 shadow-sm'
                         : 'text-emerald-100 hover:bg-emerald-900/70'
